@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <forward_list>
+#include <fstream>
 
 #include "Map.h"
 #include "Vektor2d.h"
@@ -43,23 +45,18 @@ public:
 	double y_koordinate_Figur = jump + 34.25;								//y_Korrdinate untere Rechte Ecke Bild
 	bool Tod = false;
 	double v = 5;															//Durchlaufgeschwindigkeit
+	double spielfeld = 450;													// y_Position des Spielfeldes
+	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
+	
 
-	double x1 = 400;
-	double x1_1 = 435;
-	double x2 = 500;
-	double x2_2 = 535;
-
-	vector<double> x_Koordinate_Dreiecke;
-
-
-
-	vector<double> y_Koordinate_Dreiecke;
-
+	forward_list<double> x_Koordinate_Dreiecke;
+	forward_list<double> y_Koordinate_Dreiecke;
+	vector<string> map;
 
 
 	///////
 
-	//Rechtecke
+	/*//Rechtecke
 	double xq1 = 400;
 	double xq1_1 = 440;
 
@@ -139,9 +136,9 @@ public:
 	double xd16 = 1000;
 	double xd16_1 = 1040;
 	double xd16_2 = 1020;
+	*/
 
-
-
+	
 
 
 
@@ -154,7 +151,7 @@ public:
 		///
 
 
-		graphics().draw_quad(							// Untergrund
+		/*graphics().draw_quad(							// Untergrund
 			0, 450, Gosu::Color::BLACK,
 			0, 600, Gosu::Color::BLACK,
 			800, 600, Gosu::Color::BLACK,
@@ -302,8 +299,39 @@ public:
 			xd16, 290, Gosu::Color::BLACK,
 			xd16_1, 290, Gosu::Color::BLACK,
 			xd16_2, 240, Gosu::Color::BLACK, 0.0
-		);
+		);*/
 
+
+		int x = 0;
+
+		for (auto spalten = 0; spalten < map.size(); spalten++) {
+			int y = 0;
+
+			for (auto zeilen = 0; zeilen < 5;zeilen ++) {
+				
+				
+				switch 		()																	//muss noch gemacht werden !!!!!!
+					case '>':			graphics().draw_triangle(
+										x *göße_hindernisse,  y * göße_hindernisse, Gosu::Color::BLACK,
+										x * göße_hindernisse + 20, (y + 1) * 40, Gosu::Color::BLACK,
+										(x + 1) * göße_hindernisse, y * göße_hindernisse, Gosu::Color::BLACK,
+										0.0
+										); break;
+				
+					case '|' :			graphics().draw_quad(
+										x*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
+										(x+1)*göße_hindernisse, (y+1)*göße_hindernisse, Gosu::Color::BLACK,
+										(x+1)*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
+										x*göße_hindernisse, (y + 1)*göße_hindernisse, Gosu::Color::BLACK,
+										0.0
+										); break; 
+				
+				
+				
+				y += 1;
+			}
+			x += 1;
+		}
 
 
 
@@ -314,11 +342,20 @@ public:
 
 	}
 
+	
 
 
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
+		ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\hallo.txt");
+		string zeile;
+		while (getline(f,zeile))
+		{
+			map.push_back(zeile);
+		}
+
+		
 		
 		
 
@@ -350,25 +387,29 @@ public:
 			jump = jump + down;
 		}
 
-		/*x_Koordinate_Dreiecke.push_back(x1);												//Vektor mit zahlen befüllen
-		y_Koordinate_Dreiecke.push_back(425);
+		/*x_Koordinate_Dreiecke.push_front(xd1);												//Vektor mit zahlen befüllen
+		y_Koordinate_Dreiecke.push_front(425);
 
-		for (auto i = 0; i < 1; i++)														// Bildung des Abstandes der Punkte
+		
+
+
+		for (auto i = x_Koordinate_Dreiecke.begin(); i != x_Koordinate_Dreiecke.end(); i++)														// Bildung des Abstandes der Punkte
 		{
 			double x_differenz;
-			x_differenz = 225 -x1;
+								x_differenz = *i-x_koordinate_Figur;
 			double y_differnz;
-			y_differnz = jump+17 -425  ;
+								y_differnz = jump+17 -425  ;
 
 			double betrag;
 			betrag = sqrt(x_differenz*x_differenz + y_differnz * y_differnz);
 
 			cout << betrag << endl;
-			if (betrag <5)
+			if (betrag <=1.3 )
 			{
-				cout << "Teste"<<betrag << endl;
+				cout << "Teste" << betrag << endl;
 				Tod = true;
 				break;
+			}
 		}*/
 
 
@@ -389,7 +430,7 @@ public:
 		}
 
 
-		if (start)
+		/*if (start)
 		{
 			if (xd15_2  != 0)																	//letzes Objekt auf Karte !!!
 			{
@@ -522,7 +563,7 @@ public:
 				xd16_2 = xd16_2 + 5000;
 			}
 
-		}
+		}*/
 
 
 
@@ -538,6 +579,8 @@ int main()
 {
 	GameWindow window;
 	window.show();
+
+	
 }
 
 
