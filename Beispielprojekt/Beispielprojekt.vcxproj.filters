@@ -24,10 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Planet.h">
+    <ClInclude Include="Vektor2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vektor2d.h">
+    <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClCompile Include="Beispielprojekt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Planet.cpp">
+    <ClCompile Include="Vektor2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vektor2d.cpp">
+    <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
