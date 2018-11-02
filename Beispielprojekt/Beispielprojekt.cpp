@@ -151,13 +151,13 @@ public:
 		///
 
 
-		/*graphics().draw_quad(							// Untergrund
+		graphics().draw_quad(							// Untergrund
 			0, 450, Gosu::Color::BLACK,
 			0, 600, Gosu::Color::BLACK,
 			800, 600, Gosu::Color::BLACK,
 			800, 450, Gosu::Color::BLACK,
 			0.0);
-
+		/*
 		// Rechtecke
 
 		// Würfel
@@ -302,36 +302,39 @@ public:
 		);*/
 
 
-		int x = 0;
+	
 
-		for (auto spalten = 0; spalten < map.size(); spalten++) {
-			int y = 0;
+		for (auto x = 0; x < map.size(); x++) 
+		{
+			
+			for (auto y = 0; y <= map[x].size(); y++) 
+			{
 
-			for (auto zeilen = 0; zeilen < 5;zeilen ++) {
-				
-				
-				switch 		()																	//muss noch gemacht werden !!!!!!
-					case '>':			graphics().draw_triangle(
-										x *göße_hindernisse,  y * göße_hindernisse, Gosu::Color::BLACK,
-										x * göße_hindernisse + 20, (y + 1) * 40, Gosu::Color::BLACK,
-										(x + 1) * göße_hindernisse, y * göße_hindernisse, Gosu::Color::BLACK,
-										0.0
-										); break;
-				
-					case '|' :			graphics().draw_quad(
-										x*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
-										(x+1)*göße_hindernisse, (y+1)*göße_hindernisse, Gosu::Color::BLACK,
-										(x+1)*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
-										x*göße_hindernisse, (y + 1)*göße_hindernisse, Gosu::Color::BLACK,
-										0.0
-										); break; 
-				
-				
-				
-				y += 1;
+
+				switch (map[x][y])
+					//muss noch gemacht werden !!!!!!
+				{
+							case '>':			graphics().draw_triangle(
+								x *göße_hindernisse, y * göße_hindernisse+spielfeld, Gosu::Color::BLACK,
+								x * göße_hindernisse  + 20, (y - 1) * 40 +spielfeld, Gosu::Color::BLACK,
+								(x + 1) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								0.0
+							); break;
+
+							case '|':			graphics().draw_quad(
+								x*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(x - 1)*göße_hindernisse, (y )*göße_hindernisse+spielfeld , Gosu::Color::BLACK,
+								(x - 1)*göße_hindernisse, (y-1)*göße_hindernisse +spielfeld, Gosu::Color::BLACK,
+								x*göße_hindernisse, (y - 1)*göße_hindernisse +spielfeld , Gosu::Color::BLACK,
+								0.0
+							); break;
+
+				}
 			}
-			x += 1;
+				
 		}
+			
+	
 
 
 
@@ -348,7 +351,7 @@ public:
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
-		ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\hallo.txt");
+		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Spiel_online\\Beispielprojekt\\Level1.txt");
 		string zeile;
 		while (getline(f,zeile))
 		{
