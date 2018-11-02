@@ -18,6 +18,8 @@ const double DT = 100.0;
 bool SteigendeFlanke(bool _Signal);
 
 
+
+
 class GameWindow : public Gosu::Window
 {
 public:
@@ -33,6 +35,7 @@ public:
 
 
 	}
+	
 
 	// variablen
 
@@ -54,89 +57,7 @@ public:
 	vector<string> map;
 
 
-	///////
-
-	/*//Rechtecke
-	double xq1 = 400;
-	double xq1_1 = 440;
-
-	double xq2 = 520;
-	double xq2_1 = 560;
-
-	double xq3 = 680;
-	double xq3_1 = 720;
-
-	double xq4 = 800;
-	double xq4_1 = 840;
-
-	double xq5 = 920;
-	double xq5_1 = 1170;
-
-	//Dreiecke
-	double xd1 = 360;
-	double xd1_1 = 400;
-	double xd1_2 = 380;
-
-	double xd2 = 440;
-	double xd2_1 = 480;
-	double xd2_2 = 460;
-
-	double xd3 = 480;
-	double xd3_1 = 520;
-	double xd3_2 = 500;
-
-	double xd4 = 640;
-	double xd4_1 = 680;
-	double xd4_2 = 660;
-
-	double xd5 = 720;
-	double xd5_1 = 760;
-	double xd5_2 = 740;
-
-	double xd6 = 760;
-	double xd6_1 = 800;
-	double xd6_2 = 780;
-
-	double xd7 = 840;
-	double xd7_1 = 880;
-	double xd7_2 = 860;
-
-	double xd8 = 880;
-	double xd8_1 = 920;
-	double xd8_2 = 900;
-
-	double xd9 = 920;
-	double xd9_1 = 960;
-	double xd9_2 = 940;
-
-	double xd10 = 960;
-	double xd10_1 = 1000;
-	double xd10_2 = 980;
-
-	double xd11 = 1000;
-	double xd11_1 = 1040;
-	double xd11_2 = 1020;
-
-	double xd12 = 1040;
-	double xd12_1 = 1080;
-	double xd12_2 = 1060;
-
-	double xd13 = 1080;
-	double xd13_1 = 1120;
-	double xd13_2 = 1100;
-
-	double xd14 = 1120;
-	double xd14_1 = 1160;
-	double xd14_2 = 1140;
-
-	double xd15 = 1160;
-	double xd15_1 = 1200;
-	double xd15_2 = 1180;
-
-	double xd16 = 1000;
-	double xd16_1 = 1040;
-	double xd16_2 = 1020;
-	*/
+	
 
 	
 
@@ -157,171 +78,29 @@ public:
 			800, 600, Gosu::Color::BLACK,
 			800, 450, Gosu::Color::BLACK,
 			0.0);
-		/*
-		// Rechtecke
-
-		// Würfel
-		graphics().draw_quad(
-			xq1, 450, Gosu::Color::BLACK,
-			xq1, 410, Gosu::Color::BLACK,
-			xq1_1, 410, Gosu::Color::BLACK,
-			xq1_1, 450, Gosu::Color::BLACK,
-			0.0);
-
-		graphics().draw_quad(
-			xq2, 450, Gosu::Color::BLACK,
-			xq2, 410, Gosu::Color::BLACK,
-			xq2_1, 410, Gosu::Color::BLACK,
-			xq2_1, 450, Gosu::Color::BLACK,
-			0.0);
-
-		//Stehende Quader
-		graphics().draw_quad(
-			xq3, 450, Gosu::Color::BLACK,
-			xq3, 370, Gosu::Color::BLACK,
-			xq3_1, 370, Gosu::Color::BLACK,
-			xq3_1, 450, Gosu::Color::BLACK,
-			0.0);
-
-
-		graphics().draw_quad(
-			xq4, 450, Gosu::Color::BLACK,
-			xq4, 330, Gosu::Color::BLACK,
-			xq4_1, 330, Gosu::Color::BLACK,
-			xq4_1, 450, Gosu::Color::BLACK,
-			0.0);
-
-		// Schwebender Quader
-		graphics().draw_quad(
-			xq5, 330, Gosu::Color::BLACK,
-			xq5, 290, Gosu::Color::BLACK,
-			xq5_1, 330, Gosu::Color::BLACK,
-			xq5_1, 290, Gosu::Color::BLACK,
-			0.0);
-
-
-		// Dreiecke
-
-		graphics().draw_triangle(
-			xd1, 450, Gosu::Color::BLACK,
-			xd1_1, 450, Gosu::Color::BLACK,
-			xd1_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-
-		graphics().draw_triangle(
-			xd2, 450, Gosu::Color::BLACK,
-			xd2_1, 450, Gosu::Color::BLACK,
-			xd2_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd3, 450, Gosu::Color::BLACK,
-			xd3_1, 450, Gosu::Color::BLACK,
-			xd3_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd4, 450, Gosu::Color::BLACK,
-			xd4_1, 450, Gosu::Color::BLACK,
-			xd4_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd5, 450, Gosu::Color::BLACK,
-			xd5_1, 450, Gosu::Color::BLACK,
-			xd5_2, 410, Gosu::Color::BLACK, 0.0
-
-		);
-
-		graphics().draw_triangle(
-			xd6, 450, Gosu::Color::BLACK,
-			xd6_1, 450, Gosu::Color::BLACK,
-			xd6_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd7, 450, Gosu::Color::BLACK,
-			xd7_1, 450, Gosu::Color::BLACK,
-			xd7_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd8, 450, Gosu::Color::BLACK,
-			xd8_1, 450, Gosu::Color::BLACK,
-			xd8_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd9, 450, Gosu::Color::BLACK,
-			xd9_1, 450, Gosu::Color::BLACK,
-			xd9_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd10, 450, Gosu::Color::BLACK,
-			xd10_1, 450, Gosu::Color::BLACK,
-			xd10_2, 410, Gosu::Color::BLACK, 0.0
-		);
 		
-
-		graphics().draw_triangle(
-			xd11, 450, Gosu::Color::BLACK,
-			xd11_1, 450, Gosu::Color::BLACK,
-			xd11_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd12, 450, Gosu::Color::BLACK,
-			xd12_1, 450, Gosu::Color::BLACK,
-			xd12_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd13, 450, Gosu::Color::BLACK,
-			xd13_1, 450, Gosu::Color::BLACK,
-			xd13_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd14, 450, Gosu::Color::BLACK,
-			xd14_1, 450, Gosu::Color::BLACK,
-			xd14_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd15, 450, Gosu::Color::BLACK,
-			xd15_1, 450, Gosu::Color::BLACK,
-			xd15_2, 410, Gosu::Color::BLACK, 0.0
-		);
-
-		graphics().draw_triangle(
-			xd16, 290, Gosu::Color::BLACK,
-			xd16_1, 290, Gosu::Color::BLACK,
-			xd16_2, 240, Gosu::Color::BLACK, 0.0
-		);*/
 
 
 	
 
-		for (auto x = 0; x < map.size(); x++) 
+		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
 			
-			for (auto y = 0; y <= map[x].size(); y++) 
+			for (auto y = 0; y <= map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{
 
 
 				switch (map[x][y])
-					//muss noch gemacht werden !!!!!!
+					
 				{
-							case '>':			graphics().draw_triangle(
+							case '>':			graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
 								x *göße_hindernisse, y * göße_hindernisse+spielfeld, Gosu::Color::BLACK,
 								x * göße_hindernisse  + 20, (y - 1) * 40 +spielfeld, Gosu::Color::BLACK,
 								(x + 1) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 								0.0
 							); break;
 
-							case '|':			graphics().draw_quad(
+							case '|':			graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
 								x*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 								(x - 1)*göße_hindernisse, (y )*göße_hindernisse+spielfeld , Gosu::Color::BLACK,
 								(x - 1)*göße_hindernisse, (y-1)*göße_hindernisse +spielfeld, Gosu::Color::BLACK,
@@ -338,13 +117,14 @@ public:
 
 
 
-		Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 0.25, 0.25);			//Spielfigur
+		Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 0.25, 0.25);						//Spielfigur
 		Hintergrund.draw(0, 0, -1);															//Hintergrund
 
 
 
 	}
 
+	
 	
 
 
@@ -353,14 +133,14 @@ public:
 	{
 		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Spiel_online\\Beispielprojekt\\Level1.txt");
 		string zeile;
-		while (getline(f,zeile))
+		while (getline(f, zeile))
 		{
 			map.push_back(zeile);
 		}
 
-		
-		
-		
+
+
+
 
 		double Space = input().down(Gosu::ButtonName::KB_SPACE);							//Einlesen der Leertaste -> SPRINGEN
 
@@ -393,7 +173,7 @@ public:
 		/*x_Koordinate_Dreiecke.push_front(xd1);												//Vektor mit zahlen befüllen
 		y_Koordinate_Dreiecke.push_front(425);
 
-		
+
 
 
 		for (auto i = x_Koordinate_Dreiecke.begin(); i != x_Koordinate_Dreiecke.end(); i++)														// Bildung des Abstandes der Punkte
@@ -419,12 +199,12 @@ public:
 
 
 
-		bool Start = input().down(Gosu::ButtonName::KB_ENTER);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
+		bool Start = input().down(Gosu::ButtonName::KB_A);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
 		bool Stop = input().down(Gosu::ButtonName::KB_NUMPAD_PLUS);						//Einlesen der Entertaste ->Start des Bilddurchlaufes
 
 		if (Start)
 		{
-			start = true; 
+			start = true;
 		}
 
 		if (Stop || Tod)																			//Stopmerker
@@ -433,10 +213,21 @@ public:
 		}
 
 
-		/*if (start)
+		if (start)
 		{
-			if (xd15_2  != 0)																	//letzes Objekt auf Karte !!!
+			for (auto x = 0; x < map.size(); x++)
 			{
+				for (auto y = 0; y <= map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+				{
+
+					map[x][y] - v;
+				}
+			}
+
+			/*if (  != 0)																	//letzes Objekt auf Karte !!!
+			{
+
+
 				xq1 = xq1 - v;
 				xq2 = xq2 - v;
 				xq3 = xq3 - v;
@@ -465,7 +256,7 @@ public:
 				xd14 = xd14 - v;
 				xd15 = xd15 - v;
 				xd16 = xd16 - v;
-				
+
 				xd1_1 = xd1_1 - v;
 				xd2_1 = xd2_1 - v;
 				xd3_1 = xd3_1 - v;
@@ -564,34 +355,35 @@ public:
 				xd14_2 = xd14_2 + 5000;
 				xd15_2 = xd15_2 + 5000;
 				xd16_2 = xd16_2 + 5000;
-			}
+			}*/
 
-		}*/
-
-
+		}
 
 
 
-	};
 
+
+	}
 };
 
 
+
+
 // C++ Hauptprogramm
-int main()
-{
-	GameWindow window;
-	window.show();
-
-	
-}
+	int main()
+	{
+		GameWindow window;
+		window.show();
 
 
-bool SteigendeFlanke(bool _Signal)
-{
-	static bool Flankenmerker;
-	static bool Hilfsmerker;
-	Flankenmerker = _Signal && !Hilfsmerker;
-	Hilfsmerker = _Signal;
+	}
+
+
+	bool SteigendeFlanke(bool _Signal)
+	{
+		static bool Flankenmerker;
+		static bool Hilfsmerker;
+		Flankenmerker = _Signal && !Hilfsmerker;
+		Hilfsmerker = _Signal;
 		return Flankenmerker;
-}
+	}
