@@ -58,7 +58,7 @@ public:
 	
 	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
 	vector<double>y_crash;
-	vector<double>verschieben;
+	
 
 
 
@@ -101,12 +101,12 @@ public:
 				{
 				case '>':			
 					
-					d1 = x * göße_hindernisse;
+					
 					
 					
 					
 					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-					d1, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					x * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					x * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
 					(x + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0);
@@ -114,7 +114,7 @@ public:
 
 					x_crash.push_back(x * göße_hindernisse);				//Beschreiben x-vector mit werten
 					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
-					verschieben.push_back(d1);
+					
 					
 					break;
 
@@ -233,12 +233,7 @@ public:
 			if (start)
 			{
 				cout << "Start" << endl;
-				verschieben[0] = verschieben[0] - v;
-				for (auto x = 0; x < verschieben.size(); x++)
-				{
-					verschieben[x] = verschieben[x] - v;
-					
-				}
+				
 
 				/*if (  != 0)																	//letzes Objekt auf Karte !!!
 				{
