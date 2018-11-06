@@ -40,12 +40,12 @@ public:
 	// variablen
 
 	double jump = 430;									//Startpunkt der Figur
-	double high = 100;									//Sprunghöhe	
+	double high = 60;									//Sprunghöhe	
 	double down = 5;									//Falltiefe
 	bool start = false;
 	bool Flankemerker = false;
-	double x_koordinate_Figur = 210;								//x_Korrdinate untere Rechte Ecke Bild
-	double y_koordinate_Figur = jump-10;								//y_Korrdinate untere Rechte Ecke Bild
+	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
+	double y_koordinate_Figur = jump-10;								//y_Korrdinate Mitte Spielfigur
 	bool Tod = false;
 	double v = 5;															//Durchlaufgeschwindigkeit
 	double spielfeld = 450;													// y_Position des Spielfeldes
@@ -53,11 +53,9 @@ public:
 	bool crash = false;
 
 
-	forward_list<double> x_Koordinate_Dreiecke;
-	forward_list<double> y_Koordinate_Dreiecke;
 	
 	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
-	vector<double>y_crash;
+	vector<double>y_crash;												//
 	
 
 
@@ -86,12 +84,11 @@ public:
 
 
 
-		double test_x;
-		double test_y;
+		
 
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
-			double d1;
+		
 
 			for (auto y = 0; y <= map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
@@ -99,10 +96,7 @@ public:
 				switch (map[x][y])
 
 				{
-				case '>':			
-					
-					
-					
+				case '>':								
 					
 					
 					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
@@ -162,31 +156,53 @@ public:
 
 		if (Space)																			//Flankenmerker zum Springen
 		{
+			
 			Flankemerker = true;
 		}
 		else
 		{
 			Flankemerker = false;
 		}
-
-
-
-
-		if (SteigendeFlanke(Flankemerker) && jump == 430)										//Später durch Variable ersetzten die gesetzt wird, falls rechteck auf anderem Rechteck!!!!!
+		
+		bool top = false;
+	
+		if (SteigendeFlanke(Flankemerker)&&!top)
 		{
-			
-				jump = jump - high;
+			for (auto i = 0; i < high; i++)
+			{
+				
+				jump=jump-1;
+
+				if (i == high-1)
+				{
+					top = true;
+					cout << "top" << endl;
+				}
+				Sleep(200);
+				cout << jump << endl;
+			}
 			
 		}
 
-
-
-
-
-		if (jump != 430)
+		if (top)
 		{
-			jump = jump + down;
+			
+			Sleep(500);
+			for (auto i = 0; i < high; i++)
+			{
+				jump++;
+				if (i == high - 1)
+				{
+					top = true;
+					cout << "top2" << endl;
+				}
+			}
+			
 		}
+		
+
+
+		
 
 		/*double diffx=400;
 		double diffy=400;
