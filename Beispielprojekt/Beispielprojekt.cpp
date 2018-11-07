@@ -90,7 +90,7 @@ public:
 		{
 		
 
-			for (auto y = 0; y <= map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
 
 				switch (map[x][y])
@@ -106,7 +106,7 @@ public:
 					0.0);
 
 
-					x_crash.push_back(x * göße_hindernisse);				//Beschreiben x-vector mit werten
+					x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
 					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
 					
 					
@@ -115,8 +115,8 @@ public:
 
 				case '|':			graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
 					x*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					x*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0
 				);
@@ -210,14 +210,14 @@ public:
 		for (auto i = 0; i > x_crash.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
 			diffx = x_crash[i] - x_koordinate_Figur;
-			//cout << "x_differenz: " << diffx << endl; ;
+			cout << "x_differenz: " << diffx << endl; ;
 			
 		}
 
 		for (auto i = 0; i < y_crash.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
 			diffy = y_crash[i] - y_koordinate_Figur;
-			//cout << "y_differenz: " << diffy << endl; ;
+			cout << "y_differenz: " << diffy << endl; ;
 						
 		}
 
