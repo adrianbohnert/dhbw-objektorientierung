@@ -72,7 +72,7 @@ public:
 	void draw() override
 	{
 
-		///
+		
 
 
 		graphics().draw_quad(							// Untergrund
