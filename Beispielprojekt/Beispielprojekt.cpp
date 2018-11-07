@@ -51,6 +51,7 @@ public:
 	double spielfeld = 450;													// y_Position des Spielfeldes
 	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
+	int run = false;
 
 
 	
@@ -83,36 +84,48 @@ public:
 			0.0);
 
 
-
+		if (start)
+		{
+			run = 1;
+		}
+		else
+		{
+			run = 0;
+		}
 		
 
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
-			for (auto y = 0; y <= map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+		
+
+			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
 
 				switch (map[x][y])
 
 				{
-				case '>':		graphics().draw_triangle(									//Bildung von Dreiecken fals > in Textdatei
-					x * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					x * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
-					(x + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+				case '>':								
+					
+					
+					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
+					(x-run*5) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x-run*5) * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
+					((x - run * 5) + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0);
 
 
-					//x_crash.push_back(x * göße_hindernisse);				//Beschreiben x-vector mit werten
-					//y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
+					x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
+					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
 					
 					
 					break;
 
 
 				case '|':			graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-					x*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					x*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x - run * 5)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					((x - run * 5) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					((x - run * 5) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x - run * 5)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0
 				);
 
@@ -206,14 +219,14 @@ public:
 		for (auto i = 0; i > x_crash.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
 			diffx = x_crash[i] - x_koordinate_Figur;
-			//cout << "x_differenz: " << diffx << endl; ;
+			cout << "x_differenz: " << diffx << endl; ;
 			
 		}
 
 		for (auto i = 0; i < y_crash.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
 			diffy = y_crash[i] - y_koordinate_Figur;
-			//cout << "y_differenz: " << diffy << endl; ;
+			cout << "y_differenz: " << diffy << endl; ;
 						
 		}
 
@@ -246,12 +259,6 @@ public:
 			{
 				cout << "Start" << endl;
 				
-
-				
-
-
-
-
 
 
 			}
