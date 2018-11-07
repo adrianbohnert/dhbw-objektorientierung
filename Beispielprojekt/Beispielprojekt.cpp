@@ -98,7 +98,7 @@ public:
 		{
 		
 
-			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+			for (auto y = 0; y <map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
 
 				switch (map[x][y])
