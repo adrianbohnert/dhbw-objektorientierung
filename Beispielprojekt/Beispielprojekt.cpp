@@ -93,7 +93,7 @@ public:
 			run = 0;
 		}
 		
-
+	
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
 		
