@@ -16,7 +16,7 @@ using namespace std;
 // Simulationsgeschwindigkeit
 const double DT = 100.0;
 bool SteigendeFlanke(bool _Signal);
-vector<string> map;
+
 
 
 
@@ -57,7 +57,7 @@ public:
 	
 	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
 	vector<double>y_crash;												//
-	
+	vector<string> map;
 
 
 
@@ -87,6 +87,7 @@ public:
 		if (start)
 		{
 			run = 1;
+			cout << "start" << endl;
 		}
 		else
 		{
@@ -96,9 +97,9 @@ public:
 
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
-		
+			
 
-			for (auto y = 0; y <map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
 
 				switch (map[x][y])
@@ -153,6 +154,14 @@ public:
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
+		
+		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+		string zeile;
+		while (getline(f, zeile))
+		{
+			map.push_back(zeile);
+			
+		}
 
 		
 		
@@ -257,7 +266,7 @@ public:
 
 			if (start)
 			{
-				cout << "Start" << endl;
+				
 				
 
 
@@ -272,12 +281,7 @@ public:
 // C++ Hauptprogramm
 	int main()
 	{
-		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Spiel_online\\Beispielprojekt\\Level1.txt");
-		string zeile;
-		while (getline(f, zeile))
-		{
-			map.push_back(zeile);
-		}
+		
 
 
 		GameWindow window;
