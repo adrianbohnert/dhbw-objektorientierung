@@ -49,11 +49,11 @@ public:
 	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
 	double y_koordinate_Figur = jump-10;								//y_Korrdinate Mitte Spielfigur
 	bool Tod = false;
-	double v = 5;															//Durchlaufgeschwindigkeit
+	double v = 0.4;															//Durchlaufgeschwindigkeit
 	double spielfeld = 450;													// y_Position des Spielfeldes
 	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
-	int run = false;
+	double run = 0;
 
 
 	
@@ -68,7 +68,7 @@ public:
 
 
 
-
+	
 	// wird bis zu 60x pro Sekunde aufgerufen.
 	// Wenn die Grafikkarte oder der Prozessor nicht mehr hinterherkommen,
 	// dann werden `draw` Aufrufe ausgelassen und die Framerate sinkt
@@ -86,16 +86,6 @@ public:
 			0.0);
 
 
-		if (start)
-		{
-			run = 1;
-			cout << "start" << endl;
-		}
-		else
-		{
-			run = 0;
-		}
-		
 	
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
@@ -111,12 +101,12 @@ public:
 					
 					
 					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-					(x-run*5) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x-run*5) * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
-					((x - run * 5) + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x-run) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x-run) * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
+					((x - run ) + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0);
 
-
+					
 					x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
 					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
 					
@@ -125,10 +115,10 @@ public:
 
 
 				case '|':			graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-					(x - run * 5)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					((x - run * 5) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					((x - run * 5) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - run * 5)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+					(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 					0.0
 				);
 
@@ -156,8 +146,18 @@ public:
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
-		
-		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+		if (start)
+		{
+			run = run +v;
+			//cout << "start" << endl;
+		}
+		else
+		{
+			run = 0;
+		}
+
+
+		ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
 		string zeile;
 		while (getline(f, zeile))
 		{
@@ -224,30 +224,33 @@ public:
 
 		
 
-		/*double diffx=400;
+		double diffx=400;
 		double diffy=400;
 
-		for (auto i = 0; i > x_crash.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
+		for (auto i = 0; i < x_crash.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
 			diffx = x_crash[i] - x_koordinate_Figur;
-			cout << "x_differenz: " << diffx << endl; ;
+			//cout << "x_differenz: " << diffx << endl; ;
 			
 		}
 
 		for (auto i = 0; i < y_crash.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
 			diffy = y_crash[i] - y_koordinate_Figur;
-			cout << "y_differenz: " << diffy << endl; ;
+			//cout << "y_differenz: " << diffy << endl; ;
 						
 		}
 
 		if ((diffx < 40) && (diffy < 40))
 		{
 			crash = true;
-		}*/
+		}
 
 
-			
+		if (crash)
+		{
+			cout << "tod" << endl;
+		}
 
 
 
@@ -260,7 +263,7 @@ public:
 				start = true;
 			}
 
-			if (Stop || Tod)																			//Stopmerker
+			if (Stop || crash)																			//Stopmerker
 			{
 				start = false;
 			}
