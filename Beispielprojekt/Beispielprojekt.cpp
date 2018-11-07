@@ -25,10 +25,12 @@ class GameWindow : public Gosu::Window
 public:
 	Gosu::Image Spielfigur;
 	Gosu::Image Hintergrund;
+	Gosu::Image Startbildschirm;
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
+		, Startbildschirm("Startbildschirm.png")
 
 	{
 		set_caption("Adriano Game");
