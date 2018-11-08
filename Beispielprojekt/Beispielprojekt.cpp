@@ -45,19 +45,16 @@ public:
 class GameWindow : public Gosu::Window
 {
 public:
-	Gosu::Image Spielfigur;
-	Gosu::Image Hintergrund;
-	Gosu::Image Startbildschirm;
+	Gosu::Image Spielfigur, Hintergrund, Startbildschirm;
+	Gosu::Song Spielsong;
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
 		, Startbildschirm("Startbildschirm.png")
-
+		, Spielsong("The Caribbean Theme Song.mp3")
 	{
-		set_caption("Adriano Game");
-
-
+		set_caption("square Game");
 	}
 
 
@@ -70,7 +67,7 @@ public:
 	
 	//Start und Stop
 	bool start = false;
-	bool Flankemerker = false;
+	bool springen = false;
 	bool Tod = false;
 	bool crash = false;
 
@@ -84,14 +81,17 @@ public:
 	double spielfeld = 450;												// y_Position des Spielfeldes
 	double göße_hindernisse = 40;										// Abstände der einzelnen koordinaten der Hindernisse
 	
-	//Zähler
-	int zaehler=0;														//Zähler für Dreicke
+
+	
 	
 	bool lesen = true;
 	bool schleife = true;
 
 	//Zum Anzeigen des Huptbildschirmes
 	bool startbildschirm = false;
+
+	//Score anzeige
+	int punkte=0;
 
 	//Mapvektor
 	vector<string> map;
@@ -247,9 +247,11 @@ public:
 				*/
 
 
-
-				Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 1, 1);						//Spielfigur
-				Hintergrund.draw(0, 0, -1);															//Hintergrund
+				//Spielfigur
+				Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 1, 1);						
+				//Hintergrund
+				Hintergrund.draw(0, 0, -1);	
+				//Startbildschirm
 				if (startbildschirm == false)
 				{
 					Startbildschirm.draw(0, 0, 0, 1, 1);
@@ -268,18 +270,15 @@ public:
 
 		if (lesen) // wird genau ein mal ausgelesen
 		{
-
-			
 			//Einlesen der Levels
 			//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
 			ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+			
 			string zeile;
 			while (getline(f, zeile))
 			{
 				map.push_back(zeile);
-
 			}
-
 			lesen = false;
 		}
 
@@ -287,21 +286,19 @@ public:
 		
 		
 		//Einlesen der Springtaste ->Leertaste
-		double Space = input().down(Gosu::ButtonName::KB_SPACE);							
-		
-		
-		if (Space)																			
+		bool Springen = input().down(Gosu::ButtonName::KB_SPACE);							
+	
+		if (Springen)																			
 		{
-			
-			Flankemerker = true;
+			springen = true;
 		}
 		else
 		{
-			Flankemerker = false;
+			springen = false;
 		}
 		
 		//Flankenmerker zum Springen
-		if (SteigendeFlanke(Flankemerker))
+		if (SteigendeFlanke(springen))
 		{
 			jump = jump - high;
 		}
@@ -326,7 +323,7 @@ public:
 			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-			cout << "x_differenz: " << diffx << endl; ;
+				cout << "x_differenz: " << diffx << endl; ;
 			
 			}
 			
@@ -337,7 +334,7 @@ public:
 		{
 			if (dreieck.at(i).xo <= 230)
 			{
-				diffy = 430 - y_koordinate_Figur; // Y Koordinate ändert sich nicht 
+				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
 				cout << "y_differenz: " << diffy << endl; ;
 				
 			}
@@ -357,8 +354,8 @@ public:
 
 
 		
-			bool Start = input().down(Gosu::ButtonName::KB_S);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
-			bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der Entertaste ->Start des Bilddurchlaufes
+			bool Start = input().down(Gosu::ButtonName::KB_S);						//Einlesen der "S" Taste ->Start des Bilddurchlaufes
+			bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der "B" ->Stop des Bilddurchlaufes
 
 			if (Start)
 			{
@@ -397,14 +394,19 @@ public:
 			{
 				start = false;
 			}
-
-			if(Start)
+			
+			//Startbildschirm aufplotten lassen
+			if (Start)
 			{
 				startbildschirm = true;
 			}
 			
-			
-		
+			if (start)
+			{
+				punkte ++;
+				Spielsong.play();
+			}
+
 	}
 };
 
@@ -414,13 +416,8 @@ public:
 // C++ Hauptprogramm
 	int main()
 	{
-		
-
-
 		GameWindow window;
 		window.show();
-		
-
 	}
 
 
