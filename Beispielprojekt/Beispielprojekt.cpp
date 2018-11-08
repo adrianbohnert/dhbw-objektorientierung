@@ -54,6 +54,7 @@ public:
 	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
 	double run = 0;
+	int xco;
 	
 	
 
@@ -98,16 +99,16 @@ public:
 
 					for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 					{
-
+						xco = x - run;
 						switch (map[x][y])
 
 						{
 						case '>':	
-									
+							
 							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-								(x - run)+göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-								(x - run)+göße_hindernisse+20, (y-1)+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-								(x-run)+1*göße_hindernisse, y+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(xco)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(xco)*göße_hindernisse+20, (y-1)+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								((xco)+1)*göße_hindernisse, y+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 								0.0);
 
 
@@ -118,31 +119,31 @@ public:
 							break;
 
 
-						//case '|':
+						case '|':
 
-							/*graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-							(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
+							(xco)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							((xco) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							((xco) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							(xco)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
 							0.0
-						);*/
+						);
 
-							//break;
+							break;
 
 
 				default: break;
-				}
-			}
+						}
+					}
 
 			}
 
 
-			for (auto i = 0; i < xd.size(); i++)
+		/*	for (auto i = 0; i < xd.size(); i++)
 			{
 
 			}
-		
+		*/
 			
 		
 
@@ -163,7 +164,7 @@ public:
 		if (start)
 		{
 			
-			//run = run +v;
+			run = run +v;
 			
 		}
 		if(start==false)
@@ -172,8 +173,8 @@ public:
 		}
 
 
-		//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+		ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+		//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
 		string zeile;
 		while (getline(f, zeile))
 		{
@@ -189,7 +190,7 @@ public:
 
 		double Space = input().down(Gosu::ButtonName::KB_SPACE);							//Einlesen der Leertaste -> SPRINGEN
 
-		/*if (Space)																			//Flankenmerker zum Springen
+		if (Space)																			//Flankenmerker zum Springen
 		{
 			
 			Flankemerker = true;
@@ -210,79 +211,7 @@ public:
 			jump = jump + down;
 		}
 
-		/*if (SteigendeFlanke(Flankemerker)&&!top)
-		{
-			for (auto i = 0; i < high; i++)
-			{
-				
-				jump=jump-1;
-
-				if (i == high-1)
-				{
-					top = true;
-					cout << "top" << endl;
-				}
-				
-				cout << jump << endl;
-			}
-			Sleep(5000);
-			
-		}
 		
-		if (top)
-		{
-			
-			Sleep(500);
-			for (auto i = 0; i < high; i++)
-			{
-				jump++;
-				if (i == high - 1)
-				{
-					top = true;
-					cout << "bottom" << endl;
-				}
-			}
-			
-		}*/
-		
-		
-		/*
-		if (SteigendeFlanke(Flankemerker) && !top)
-		{ 
-			double test;
-			double val;
-			for (int i = 0; i <= 2500; i++)
-			{
-				val = i*0.01 + 0.01;
-				test = ((val - sqrt(70))*(val - sqrt(70)) +360);
-				
-				if (test <  450)
-				{
-					cout << test << endl;
-					jump = test;
-				}
-			}
-		}*/
-
-		/*
-
-		if (SteigendeFlanke(Flankemerker) && !top)
-		{
-
-
-			for (int i = 430; i > 360; i--)
-			{
-				jump = i;
-
-			}
-
-			for (int i = 360; i < 430; i++)
-			{
-				jump = i;
-
-			}
-		}
-		*/
 
 
 		double diffx=400;
