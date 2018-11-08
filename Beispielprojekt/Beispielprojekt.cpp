@@ -216,7 +216,7 @@ public:
 			if (x_crash[i] <= 800)
 			{
 				diffx = x_crash[i] - x_koordinate_Figur;
-				cout << "x_differenz: " << diffx << endl; ;
+				//cout << "x_differenz: " << diffx << endl; ;
 
 			}
 			
@@ -227,7 +227,7 @@ public:
 			if (x_crash[i] <= 800)
 			{
 				diffy = y_crash[i] - y_koordinate_Figur;
-				cout << "y_differenz: " << diffy << endl; ;
+				//cout << "y_differenz: " << diffy << endl; ;
 			}
 		}
 
