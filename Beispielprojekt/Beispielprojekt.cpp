@@ -131,8 +131,9 @@ public:
 							//break;
 
 
-						}
-					}
+				default: break;
+				}
+			}
 
 			}
 
