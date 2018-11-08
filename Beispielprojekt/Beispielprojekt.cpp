@@ -32,12 +32,13 @@ class Dreieck
 
 class Viereck
 {
+public:
 	double xl;
 	double xr;
 	double yu;
 	double yo;
 
-	Viereck(double xlinks, double xrechts, double yoben, double yunten) : xl(xlinks), xr(xrechts), yo(yoben), yu(yunten) {}
+	Viereck(double xlinks, double xrechts, double yunten, double yoben) :xl(xlinks), xr(xrechts),  yu(yunten), yo(yoben) {}
  };
 
 
@@ -76,6 +77,8 @@ public:
 	//Durchlaufgeschwindigkeit
 	double v = 0.1;															
 	double run = 0;
+	int zaehler=0;
+	int zaehler_v = 0;
 
 	//Spielfeld und Hindernissgröße
 	double spielfeld = 450;												// y_Position des Spielfeldes
@@ -166,7 +169,7 @@ public:
 
 						{
 
-							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
+							graphics().draw_triangle(								
 								dreieck.at(i).xl, dreieck.at(i).yu, Gosu::Color::BLACK,
 								dreieck.at(i).xo, dreieck.at(i).yo, Gosu::Color::BLACK,
 								dreieck.at(i).xr, dreieck.at(i).yu, Gosu::Color::BLACK,
@@ -180,17 +183,51 @@ public:
 							break;
 
 
-							/*case '|':
+				case '|':
+					if (start == false)
 
-								graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-									(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-									((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-									((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-									(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-									0.0
-								);
-								break;
-								*/
+					{
+						if (schleife == true) // wird genau so oft aufgerufen wie Vierecke in der Map sind
+						{
+
+						viereck.push_back(Viereck( x*göße_hindernisse, (x + 1)*göße_hindernisse, y*göße_hindernisse + spielfeld, (y - 1)*göße_hindernisse + spielfeld));
+						zaehler_v++;
+						}
+
+						
+						for (auto i = 1; i <= zaehler_v; i++)
+						{
+							graphics().draw_quad(
+								viereck.at(i - 1).xl,viereck.at(i - 1).yu, Gosu::Color::BLACK,
+								viereck.at(i - 1).xr, viereck.at(i - 1).yu, Gosu::Color::BLACK,
+								viereck.at(i - 1).xl, viereck.at(i - 1).yo, Gosu::Color::BLACK,
+								viereck.at(i - 1).xr, viereck.at(i - 1).yo, Gosu::Color::BLACK,
+								0.0);
+						}
+					}
+
+					if (start == true)
+					{
+
+
+						for (auto i = 0; i < zaehler_v; i++)
+
+						{
+
+							graphics().draw_quad(
+								viereck.at(i ).xl, viereck.at(i).yu, Gosu::Color::BLACK,
+								viereck.at(i).xr, viereck.at(i).yu, Gosu::Color::BLACK,
+								viereck.at(i).xl, viereck.at(i).yo, Gosu::Color::BLACK,
+								viereck.at(i).xr, viereck.at(i).yo, Gosu::Color::BLACK,
+								0.0);
+
+						}
+
+
+					}
+								
+						break;
+								
 
 
 				default: break;
@@ -335,15 +372,21 @@ public:
 			if (start == true)
 			{
 				
-					run = run + v;
+					run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
 					for (auto i = dreieck.begin(); i != dreieck.end(); i++)
 					{
-						(i->xl) = (i->xl) - run;
+						(i->xl) = (i->xl) - run; // wird im run nach links verschoben und in Vektor gespeichert
 						(i->xr) = (i->xr) - run;
 						(i->xo) = (i->xo) - run;
 
 					}
 
+					for (auto i = viereck.begin(); i != viereck.end(); i++)
+					{
+						(i->xl) = (i->xl) - run;
+						(i->xr) = (i->xr) - run;
+
+					}
 					Sleep(10);
 				
 			}
