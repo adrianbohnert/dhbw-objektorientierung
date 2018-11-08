@@ -122,6 +122,7 @@ public:
 
 					break;
 
+				default: break;
 				}
 			}
 
