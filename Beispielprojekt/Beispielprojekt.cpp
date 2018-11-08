@@ -208,7 +208,16 @@ public:
 		
 		bool top = false;
 	
-		if (SteigendeFlanke(Flankemerker)&&!top)
+		if (SteigendeFlanke(Flankemerker))
+		{
+			jump = jump - high;
+		}
+		if(jump !=430)
+		{
+			jump = jump + down;
+		}
+
+		/*if (SteigendeFlanke(Flankemerker)&&!top)
 		{
 			for (auto i = 0; i < high; i++)
 			{
@@ -220,12 +229,13 @@ public:
 					top = true;
 					cout << "top" << endl;
 				}
-				Sleep(200);
+				
 				cout << jump << endl;
 			}
+			Sleep(5000);
 			
 		}
-
+		
 		if (top)
 		{
 			
@@ -236,15 +246,51 @@ public:
 				if (i == high - 1)
 				{
 					top = true;
-					cout << "top2" << endl;
+					cout << "bottom" << endl;
 				}
 			}
 			
 		}*/
 		
-
-
 		
+		/*
+		if (SteigendeFlanke(Flankemerker) && !top)
+		{ 
+			double test;
+			double val;
+			for (int i = 0; i <= 2500; i++)
+			{
+				val = i*0.01 + 0.01;
+				test = ((val - sqrt(70))*(val - sqrt(70)) +360);
+				
+				if (test <  450)
+				{
+					cout << test << endl;
+					jump = test;
+				}
+			}
+		}*/
+
+		/*
+
+		if (SteigendeFlanke(Flankemerker) && !top)
+		{
+
+
+			for (int i = 430; i > 360; i--)
+			{
+				jump = i;
+
+			}
+
+			for (int i = 360; i < 430; i++)
+			{
+				jump = i;
+
+			}
+		}
+		*/
+
 
 		double diffx=400;
 		double diffy=400;
