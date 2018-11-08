@@ -25,10 +25,12 @@ class GameWindow : public Gosu::Window
 public:
 	Gosu::Image Spielfigur;
 	Gosu::Image Hintergrund;
+	Gosu::Image Startbildschirm;
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
+		, Startbildschirm("Startbildschirm.png")
 
 	{
 		set_caption("Adriano Game");
@@ -52,13 +54,17 @@ public:
 	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
 	double run = 0;
-
+	
+	
 
 	
 	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
-	vector<double>y_crash;												//
+	vector<double>y_crash;				
 	vector<string> map;
-
+	vector<double>xd;
+	vector<double>yd;
+	vector<double>xr;
+	vector< double>yr;
 
 
 
@@ -83,53 +89,62 @@ public:
 			800, 450, Gosu::Color::BLACK,
 			0.0);
 
+		
+		
 
-	
-		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
-		{
-			
-			//
-			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
-			{			
+			for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
+			{
+				
 
-				switch (map[x][y])
+					for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
+					{
 
-				{
-				case '>':								
-					
-					
-					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-					(x-run) * göße_hindernisse , y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x-run) * göße_hindernisse + 20, (y - 1) * 40 + spielfeld, Gosu::Color::BLACK,
-					((x - run ) + 1) * göße_hindernisse, y * göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					0.0);
+						switch (map[x][y])
 
-					
-					x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
-					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
-					
-					
-					break;
+						{
+						case '>':	
+									
+							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
+								(x - run)+göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(x - run)+göße_hindernisse+20, (y-1)+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(x-run)+1*göße_hindernisse, y+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								0.0);
 
 
-				case '|':			graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-					(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-					0.0
-				);
+							//x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
+							//y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
 
-					break;
+
+							break;
+
+
+						//case '|':
+
+							/*graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
+							(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+							0.0
+						);*/
+
+							//break;
+
 
 				default: break;
 				}
 			}
 
-		}
+			}
 
+
+			for (auto i = 0; i < xd.size(); i++)
+			{
+
+			}
 		
-
+			
+		
 
 		Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 1, 1);						//Spielfigur
 		Hintergrund.draw(0, 0, -1);															//Hintergrund
@@ -147,16 +162,18 @@ public:
 	{
 		if (start)
 		{
-			run = run +v;
-			//cout << "start" << endl;
+			
+			//run = run +v;
+			
 		}
-		else
+		if(start==false)
 		{
 			run = 0;
 		}
 
 
-		ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+		//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
 		string zeile;
 		while (getline(f, zeile))
 		{
@@ -165,7 +182,6 @@ public:
 		}
 
 		
-		
 
 
 
@@ -173,7 +189,7 @@ public:
 
 		double Space = input().down(Gosu::ButtonName::KB_SPACE);							//Einlesen der Leertaste -> SPRINGEN
 
-		if (Space)																			//Flankenmerker zum Springen
+		/*if (Space)																			//Flankenmerker zum Springen
 		{
 			
 			Flankemerker = true;
@@ -227,8 +243,7 @@ public:
 				}
 			}
 			
-			
-		}
+		}*/
 		
 		
 		/*
@@ -302,7 +317,7 @@ public:
 
 
 			bool Start = input().down(Gosu::ButtonName::KB_A);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
-			bool Stop = input().down(Gosu::ButtonName::KB_NUMPAD_PLUS);						//Einlesen der Entertaste ->Start des Bilddurchlaufes
+			bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der Entertaste ->Start des Bilddurchlaufes
 
 			if (Start)
 			{
@@ -315,13 +330,7 @@ public:
 			}
 
 
-			if (start)
-			{
-				
-				
-
-
-			}
+			
 		
 	}
 };
