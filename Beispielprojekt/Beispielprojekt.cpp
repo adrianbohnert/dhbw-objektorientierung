@@ -102,15 +102,12 @@ public:
 						switch (map[x][y])
 
 						{
-						case '>':	xd.push_back(x*göße_hindernisse);
-									xd.push_back((x + 1)*göße_hindernisse);
-									yd.push_back(y + göße_hindernisse);
-									yd.push_back((y - 1)*göße_hindernisse);
+						case '>':	
 									
-							/*graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-								(testx1), testy1 + spielfeld, Gosu::Color::BLACK,
-								(testx2)+20, testy2 + spielfeld, Gosu::Color::BLACK,
-								(testx1), testy1 + spielfeld, Gosu::Color::BLACK,
+							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
+								(x - run), y + spielfeld, Gosu::Color::BLACK,
+								(x - run)+20, (y-1) + spielfeld, Gosu::Color::BLACK,
+								(x-run), testy1 + spielfeld, Gosu::Color::BLACK,
 								0.0);*/
 
 
@@ -170,8 +167,7 @@ public:
 		{
 			
 			//run = run +v;
-			testx1 = testx1 - 5;
-			testx2 = testx2 - 5;
+			
 		}
 		if(start==false)
 		{
