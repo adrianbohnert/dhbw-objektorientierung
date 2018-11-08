@@ -88,7 +88,7 @@ public:
 		for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
 		{
 			
-
+			//
 			for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
 			{			
 
