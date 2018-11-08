@@ -105,10 +105,10 @@ public:
 						case '>':	
 									
 							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-								(x - run), y + spielfeld, Gosu::Color::BLACK,
-								(x - run)+20, (y-1) + spielfeld, Gosu::Color::BLACK,
-								(x-run), testy1 + spielfeld, Gosu::Color::BLACK,
-								0.0);*/
+								(x - run)+göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(x - run)+göße_hindernisse+20, (y-1)+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								(x-run)+1*göße_hindernisse, y+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+								0.0);
 
 
 							//x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
@@ -142,11 +142,7 @@ public:
 
 			}
 		
-			graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-				(testx1), testy1 + spielfeld, Gosu::Color::BLACK,
-				(testx2)+20, testy2 + spielfeld, Gosu::Color::BLACK,
-				(testx1), testy1 + spielfeld, Gosu::Color::BLACK,
-				0.0);
+			
 		
 
 		Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 1, 1);						//Spielfigur
