@@ -59,14 +59,11 @@ public:
 
 	
 	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
-	vector<double>y_crash;				
+	vector<double>y_crash;	
+
+	//Mapvektor
 	vector<string> map;
-	vector<double>xd;
-	vector<double>yd;
-	vector<double>xr;
-	vector< double>yr;
-
-
+	
 
 
 
@@ -81,8 +78,8 @@ public:
 
 		
 
-
-		graphics().draw_quad(							// Untergrund
+		// Untergrund
+		graphics().draw_quad(							
 			0, 450, Gosu::Color::BLACK,
 			0, 600, Gosu::Color::BLACK,
 			800, 600, Gosu::Color::BLACK,
@@ -91,57 +88,54 @@ public:
 
 		
 		
+		//Die Spalten der Textdatei werden durchgegangen
+		for (auto x = 0; x < map.size(); x++)								
+		{
 
-			for (auto x = 0; x < map.size(); x++)								//Die Spalten der Textdatei werden durchgegangen
+			//Die Zeilen der Textdatei werden durchgegangen
+			for (auto y = 0; y < map[x].size(); y++)						
 			{
-				
 
-					for (auto y = 0; y < map[x].size(); y++)						//Die Zeilen der Textdatei werden durchgegangen
-					{
+				switch (map[x][y])
 
-						switch (map[x][y])
+				{
+				case '>':
 
-						{
-						case '>':	
-									
-							graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
-								(x - run)+göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-								(x - run)+göße_hindernisse+20, (y-1)+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-								(x-run)+1*göße_hindernisse, y+göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-								0.0);
+					graphics().draw_triangle(								//Bildung von Dreiecken fals > in Textdatei
+						(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						(x - run)*göße_hindernisse + 20, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						((x - run) + 1)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						0.0);
 
 
-							//x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
-							//y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
+					x_crash.push_back(x * göße_hindernisse+20);				//Beschreiben x-vector mit werten
+					y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten
 
 
-							break;
+					break;
 
 
-						//case '|':
+				case '|':
 
-							/*graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
-							(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
-							0.0
-						);*/
+					graphics().draw_quad(									//Bildung von Quadraten falls | in Textdatei
+						(x - run)*göße_hindernisse, y*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						((x - run) + 1)*göße_hindernisse, (y)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						((x - run) + 1)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						(x - run)*göße_hindernisse, (y - 1)*göße_hindernisse + spielfeld, Gosu::Color::BLACK,
+						0.0
+					);
+					break;
 
-							//break;
 
 
-				default: break;
+
 				}
 			}
+			
+		}
 
-			}
 
-
-			for (auto i = 0; i < xd.size(); i++)
-			{
-
-			}
+			
 		
 			
 		
@@ -160,10 +154,21 @@ public:
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
+		//Einlesen der Levels
+		//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+		string zeile;
+		while (getline(f, zeile))
+		{
+			map.push_back(zeile);
+
+		}
+
+
 		if (start)
 		{
 			
-			//run = run +v;
+			run = run +v;
 			
 		}
 		if(start==false)
@@ -171,25 +176,13 @@ public:
 			run = 0;
 		}
 
+	
 
-		//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-		ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
-		string zeile;
-		while (getline(f, zeile))
-		{
-			map.push_back(zeile);
-			
-		}
-
+		//Einlesen der Springtaste ->Leertaste
+		double Space = input().down(Gosu::ButtonName::KB_SPACE);							
 		
-
-
-
-
-
-		double Space = input().down(Gosu::ButtonName::KB_SPACE);							//Einlesen der Leertaste -> SPRINGEN
-
-		/*if (Space)																			//Flankenmerker zum Springen
+		
+		if (Space)																			
 		{
 			
 			Flankemerker = true;
@@ -199,8 +192,7 @@ public:
 			Flankemerker = false;
 		}
 		
-		bool top = false;
-	
+		//Flankenmerker zum Springen
 		if (SteigendeFlanke(Flankemerker))
 		{
 			jump = jump - high;
@@ -210,79 +202,10 @@ public:
 			jump = jump + down;
 		}
 
-		/*if (SteigendeFlanke(Flankemerker)&&!top)
-		{
-			for (auto i = 0; i < high; i++)
-			{
-				
-				jump=jump-1;
-
-				if (i == high-1)
-				{
-					top = true;
-					cout << "top" << endl;
-				}
-				
-				cout << jump << endl;
-			}
-			Sleep(5000);
-			
-		}
-		
-		if (top)
-		{
-			
-			Sleep(500);
-			for (auto i = 0; i < high; i++)
-			{
-				jump++;
-				if (i == high - 1)
-				{
-					top = true;
-					cout << "bottom" << endl;
-				}
-			}
-			
-		}*/
 		
 		
-		/*
-		if (SteigendeFlanke(Flankemerker) && !top)
-		{ 
-			double test;
-			double val;
-			for (int i = 0; i <= 2500; i++)
-			{
-				val = i*0.01 + 0.01;
-				test = ((val - sqrt(70))*(val - sqrt(70)) +360);
-				
-				if (test <  450)
-				{
-					cout << test << endl;
-					jump = test;
-				}
-			}
-		}*/
-
-		/*
-
-		if (SteigendeFlanke(Flankemerker) && !top)
-		{
-
-
-			for (int i = 430; i > 360; i--)
-			{
-				jump = i;
-
-			}
-
-			for (int i = 360; i < 430; i++)
-			{
-				jump = i;
-
-			}
-		}
-		*/
+		
+		
 
 
 		double diffx=400;
@@ -290,16 +213,22 @@ public:
 
 		for (auto i = 0; i < x_crash.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
-			diffx = x_crash[i] - x_koordinate_Figur;
-			//cout << "x_differenz: " << diffx << endl; ;
+			if (x_crash[i] <= 800)
+			{
+				diffx = x_crash[i] - x_koordinate_Figur;
+				cout << "x_differenz: " << diffx << endl; ;
+
+			}
 			
 		}
 
 		for (auto i = 0; i < y_crash.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
-			diffy = y_crash[i] - y_koordinate_Figur;
-			//cout << "y_differenz: " << diffy << endl; ;
-						
+			if (x_crash[i] <= 800)
+			{
+				diffy = y_crash[i] - y_koordinate_Figur;
+				cout << "y_differenz: " << diffy << endl; ;
+			}
 		}
 
 		if ((diffx < 40) && (diffy < 40))
