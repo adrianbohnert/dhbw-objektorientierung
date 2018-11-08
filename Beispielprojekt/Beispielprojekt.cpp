@@ -70,7 +70,7 @@ public:
 	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
 	double y_koordinate_Figur = jump-10;								//y_Korrdinate Mitte Spielfigur
 	bool Tod = false;
-	double v = 0.4;															//Durchlaufgeschwindigkeit
+	double v = 0.1;															//Durchlaufgeschwindigkeit
 	double spielfeld = 450;													// y_Position des Spielfeldes
 	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
@@ -81,8 +81,6 @@ public:
 	bool schleife = true;
 
 	
-	vector<double>x_crash;												//x_werte von der Mitte der Dreicke
-	vector<double>y_crash;	
 
 	//Mapvektor
 	vector<string> map;
@@ -167,8 +165,7 @@ public:
 
 						}
 
-						/*x_crash.push_back(x * göße_hindernisse + 20);				//Beschreiben x-vector mit werten
-						y_crash.push_back((y - 1) * 20 + spielfeld);			//Beschreiben y_vector mit werten*/
+					
 					}
 
 							break;
@@ -276,11 +273,11 @@ public:
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
 			 
-			if (dreieck.at(i).xo<= 800)
+			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-			//	cout << "x_differenz: " << diffx << endl; ;
-
+			cout << "x_differenz: " << diffx << endl; ;
+			
 			}
 			
 		}
@@ -288,10 +285,11 @@ public:
 		
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
-			if (dreieck.at(i).xo <= 800)
+			if (dreieck.at(i).xo <= 230)
 			{
 				diffy = 430 - y_koordinate_Figur; // Y Koordinate ändert sich nicht 
 				//cout << "y_differenz: " << diffy << endl; ;
+				
 			}
 		}
 
@@ -317,6 +315,10 @@ public:
 				start = true;
 			}
 
+			if (start == false || crash == true)
+			{
+				run = 0;
+			}
 			if (start == true)
 			{
 				
@@ -328,13 +330,12 @@ public:
 						(i->xo) = (i->xo) - run;
 
 					}
+
+					Sleep(10);
 				
 			}
 
-			if (start == false)
-			{
-				run = 0;
-			}
+			
 
 			if (Stop || crash)																			//Stopmerker
 			{
