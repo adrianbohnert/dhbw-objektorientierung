@@ -37,7 +37,7 @@ class Viereck
 	double yu;
 	double yo;
 
-	
+	Viereck(double xlinks, double xrechts, double yoben, double yunten) : xl(xlinks), xr(xrechts), yo(yoben), yu(yunten) {}
  };
 
 
@@ -60,31 +60,40 @@ public:
 	}
 
 
-	// variablen
-
-	double jump = 430;									//Startpunkt der Figur
-	double high = 60;									//Sprunghöhe	
-	double down = 5;									//Falltiefe
+	//Koordinaten der Figur
+	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
+	double y_koordinate_Figur = jump - 10;								//y_Korrdinate Mitte Spielfigur
+	double jump = 430;													//Startpunkt der Figur
+	double high = 60;													//Sprunghöhe	
+	double down = 5;													//Falltiefe
+	
+	//Start und Stop
 	bool start = false;
 	bool Flankemerker = false;
-	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
-	double y_koordinate_Figur = jump-10;								//y_Korrdinate Mitte Spielfigur
 	bool Tod = false;
-	double v = 0.1;															//Durchlaufgeschwindigkeit
-	double spielfeld = 450;													// y_Position des Spielfeldes
-	double göße_hindernisse = 40;											// Abstände der einzelnen koordinaten der Hindernisse
 	bool crash = false;
+
+	//Durchlaufgeschwindigkeit
+	double v = 0.1;															
 	double run = 0;
-	int zaehler=0;
+
+	//Spielfeld und Hindernissgröße
+	double spielfeld = 450;												// y_Position des Spielfeldes
+	double göße_hindernisse = 40;										// Abstände der einzelnen koordinaten der Hindernisse
+	
+	//Zähler
+	int zaehler=0;														//Zähler für Dreicke
 	
 	bool lesen = true;
 	bool schleife = true;
 
-	
+	//Zum Anzeigen des Huptbildschirmes
+	bool startbildschirm = false;
 
 	//Mapvektor
 	vector<string> map;
 	
+	//Vectoren der Koordinaten
 	vector <Dreieck> dreieck;
 	vector <Viereck> viereck;
 
@@ -204,7 +213,10 @@ public:
 
 				Spielfigur.draw_rot(200, jump, 0.0, 0, 0.5, 0.5, 1, 1);						//Spielfigur
 				Hintergrund.draw(0, 0, -1);															//Hintergrund
-
+				if (startbildschirm == false)
+				{
+					Startbildschirm.draw(0, 0, 0, 1, 1);
+				}
 
 
 	}
@@ -256,6 +268,7 @@ public:
 		{
 			jump = jump - high;
 		}
+
 		if(jump !=430)
 		{
 			jump = jump + down;
@@ -288,7 +301,7 @@ public:
 			if (dreieck.at(i).xo <= 230)
 			{
 				diffy = 430 - y_koordinate_Figur; // Y Koordinate ändert sich nicht 
-				//cout << "y_differenz: " << diffy << endl; ;
+				cout << "y_differenz: " << diffy << endl; ;
 				
 			}
 		}
@@ -307,7 +320,7 @@ public:
 
 
 		
-			bool Start = input().down(Gosu::ButtonName::KB_A);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
+			bool Start = input().down(Gosu::ButtonName::KB_S);							//Einlesen der Entertaste ->Start des Bilddurchlaufes
 			bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der Entertaste ->Start des Bilddurchlaufes
 
 			if (Start)
@@ -342,7 +355,11 @@ public:
 				start = false;
 			}
 
-
+			if(Start)
+			{
+				startbildschirm = true;
+			}
+			
 			
 		
 	}
