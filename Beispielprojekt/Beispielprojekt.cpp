@@ -45,7 +45,7 @@ public:
 class GameWindow : public Gosu::Window
 {
 public:
-	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Level_geschafft;
+	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Level_geschafft,Ende, Level;
 	Gosu::Song Spielsong;
 	
 	GameWindow()
@@ -56,6 +56,7 @@ public:
 		, Ende("Ende.png")
 		, Spielsong("The Caribbean Theme Song.mp3")
 		, Level_geschafft("Level_geschafft.png")
+		, Level ("Levelauswahl.png")
 		
 	{
 		set_caption("square Game");
@@ -72,13 +73,21 @@ public:
 	//Start und Stop
 	bool start = false;
 	bool reset=false;
+
 	bool springen = false;
 	bool crash = false;
+	
+	bool level1 = false; // true wenn Level 1 ausgewählt 
+	bool level2 = false; // true wenn Level 2 ausgewählt
+
+	//Zum anzeigen der Levelauswahl
+	bool levelauswahl = true;
 
 	//Durchlaufgeschwindigkeit
-	double v = 5;															
-	int zaehler=0;
-	int zaehler_v = 0;
+	double v = 5;	
+
+	int zaehler=0; // Zaehler der Dreiecke in Map
+	int zaehler_v = 0; // Zaehler der Vierecke in Map
 	int zähler_springen_hoch=0;
 	int zähler_springen_runter = 0;
 
@@ -89,15 +98,12 @@ public:
 
 	
 	
-
+	bool lesen = true; // Karte wird ausgelesen wenn true
 	
-	
-	bool lesen = true;
-	bool schleife = true;
 	
 
-	//Zum Anzeigen des Huptbildschirmes
-	bool startbildschirm = false;
+	//Zum (nicht) Anzeigen des Hauptbildschirmes
+	bool startbildschirm = true; // true wenn Bild nicht angezeigt!
 
 	//Score anzeige
 	int punkte=0;
@@ -112,9 +118,11 @@ public:
 
 
 
-
+	bool schleife = true; // Vektoren werden bestückt solange true
+	bool merker = false; // Schleife darf nur false gesetzt werden, wenn bereits die Map ausgelesen wurde, der Merker signalisiert das wenn true
 	
-	// wird bis zu 60x pro Sekunde aufgerufen.
+						 
+						 // wird bis zu 60x pro Sekunde aufgerufen.
 	// Wenn die Grafikkarte oder der Prozessor nicht mehr hinterherkommen,
 	// dann werden `draw` Aufrufe ausgelassen und die Framerate sinkt
 	void draw() override
@@ -148,7 +156,7 @@ public:
 
 				
 					
-					if (start == false)
+					if (start == false )
 
 					{
 						if (schleife == true) // wird genau so oft aufgerufen wie Dreiecke in der Map sind
@@ -156,6 +164,7 @@ public:
 
 									dreieck.push_back(Dreieck(x*göße_hindernisse, (x + 1)*göße_hindernisse, x*göße_hindernisse + 20, y*göße_hindernisse + spielfeld, (y - 1)*göße_hindernisse + spielfeld));
 									zaehler++;
+									cout << "Test" << endl;
 						}
 						
 						
@@ -216,7 +225,7 @@ public:
 					}
 
 					if (start == true)
-					{
+						{
 
 
 						for (auto i = 0; i < zaehler_v; i++)
@@ -243,11 +252,12 @@ public:
 				}
 			}
 
-			
-
 		}
-
-		schleife = false;
+		
+		if (merker) // nur wenn Map bereits ausgelesen wurde
+		{
+			schleife = false;
+		}
 
 
 
@@ -266,7 +276,12 @@ public:
 					Sleep(100);
 					Ende.draw(0, 0, 0, 1, 1);
 				}
-	}
+				
+				if (levelauswahl)
+				{
+					Level.draw(0, 0, 0, 1, 1);
+				}
+
 				/*for (auto i = dreieck.begin(); i != dreieck.end(); i++)
 					if (dreieck.at(i + 1)xr)
 				{
@@ -286,32 +301,69 @@ public:
 		bool Start = input().down(Gosu::ButtonName::KB_S);						//Einlesen der "S" Taste ->Start des Bilddurchlaufes
 		bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der "B" ->Stop des Bilddurchlaufes
 		bool Return = input().down(Gosu::ButtonName::KB_R);						// Einlesen der Taste "R" für Zurücksetzen
+		bool L1 = input().down(Gosu::ButtonName::KB_1);							// Wenn Taste 1, dann Level 1
+		bool L2 = input().down(Gosu::ButtonName::KB_2);							// Wenn Taste 2, dann Level 2
+
+		if (L1)
+		{
+			level1 = true; 
+		}
+
+		if (L2)
+		{
+			level2 = true;
+		}
 
 		if (Start)
 		{
 			
-			startbildschirm = true ;//Startbildschirm aufplotten lassen
+			startbildschirm = true;//Spiel beginnt
 			Sleep(100);
 			start = true;
 			
-			cout << "schleife" << endl;
 		}
 
+			//Einlesen der Levels
 		
 			if (lesen) // wird genau ein mal ausgelesen	
 			{
-				//Einlesen der Levels
-				ifstream f(".//Level1.txt");
-				//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
-				//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-
-
-				string zeile;
-				while (getline(f, zeile))
+				if (level1)
 				{
-					map.push_back(zeile);
+					
+					ifstream f(".//Level1.txt");
+
+					string zeile;
+					while (getline(f, zeile))
+					{
+						map.push_back(zeile);
+					}
+					
+
+					levelauswahl = false;
+					startbildschirm = false;
+					lesen = false;
+					merker = true; // Check, ob Karte ausgelesen wurde
 				}
-				lesen = false;
+
+				if (level2)
+				{
+			
+					ifstream f(".//Level2.txt");
+					
+					string zeile;
+					while (getline(f, zeile))
+					{
+						map.push_back(zeile);
+					}
+					
+
+					levelauswahl = false;
+					startbildschirm = false;
+					lesen = false;
+					merker = true; // Check, ob Karte ausgelesen wurde
+					
+				}
+			
 			}
 
 
@@ -425,7 +477,6 @@ public:
 				{
 					diffx = dreieck.at(i).xo - x_koordinate_Figur;
 
-
 				}
 
 			}
@@ -471,7 +522,9 @@ public:
 
 			if (reset)
 			{
-			
+
+				// Leeren der Vektoren, sonst Performanceprobleme
+				map.clear();
 				dreieck.clear();
 				viereck.clear();
 
@@ -481,9 +534,16 @@ public:
 
 				
 				schleife = true;
-				
+				lesen = true;
+				merker = false;
 
-				startbildschirm = false;
+				// Es wird die Levelauswahl angezeigt, wenn Return
+				startbildschirm = true;
+				levelauswahl = true;
+
+				level1 = false;
+				level2 = false;
+
 				diffx = 400;
 				diffy = 400;
 				crash = false;
@@ -494,11 +554,10 @@ public:
 				hm_viereck = false;
 				jump = 430;
 
-
+				// wird so nur ein Mal ausgeführt
 				reset = false;
 			}
 
-			
 
 	}
 	
