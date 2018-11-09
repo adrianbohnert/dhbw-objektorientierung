@@ -59,9 +59,9 @@ public:
 
 
 	//Koordinaten der Figur
-	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
-	double y_koordinate_Figur = jump - 10;								//y_Korrdinate Mitte Spielfigur
 	double jump = 430;													//Startpunkt der Figur
+	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
+	double y_koordinate_Figur = 0; 								//y_Korrdinate Mitte Spielfigur
 	double high = 5;													//Sprunghöhe	
 	bool nach_unten = false;
 
@@ -82,6 +82,8 @@ public:
 	//Spielfeld und Hindernissgröße
 	double spielfeld = 450;												// y_Position des Spielfeldes
 	double göße_hindernisse = 40;										// Abstände der einzelnen koordinaten der Hindernisse
+	bool hm_viereck=false;
+	
 	
 
 	
@@ -305,7 +307,8 @@ public:
 		if (springen&&!nach_unten)
 		{
 			jump=jump-high;
-			zähler_springen_hoch= zähler_springen_hoch+high;
+			zähler_springen_hoch = zähler_springen_hoch+high;
+			y_koordinate_Figur =jump + 10;
 		}
 
 		if (zähler_springen_hoch == 90)
@@ -319,6 +322,7 @@ public:
 		{
 			jump =jump + high;
 			zähler_springen_runter= zähler_springen_runter+high;
+			y_koordinate_Figur =  jump + 10;
 		}
 
 		if (zähler_springen_runter == 90)
@@ -340,7 +344,7 @@ public:
 			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-				//cout << "x_differenz: " << diffx << endl; ;
+				cout << "x_differenz: " << diffx << endl; ;
 			
 			}
 			
@@ -352,12 +356,12 @@ public:
 			if (dreieck.at(i).xo <= 230)
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-				//cout << "y_differenz: " << diffy << endl; ;
+				cout << "y_differenz: " << diffy << endl; ;
 				
 			}
 		}
 
-		if ((diffx < 40) && (diffy < 40))
+		if (abs(diffx < 20) && abs((diffy < 20)))
 		{
 			crash = true;
 		}
@@ -424,6 +428,39 @@ public:
 				punkte ++;
 				Spielsong.play();
 			}
+
+			
+
+			for (auto i = 0; i < viereck.size(); i++)
+			{		
+				
+				if (viereck.at(i).xl == 250 && viereck.at(i).xr==290)
+				{
+					
+					hm_viereck = true;
+				}
+				if (hm_viereck)
+				{
+					if (y_koordinate_Figur == 400)
+					{
+						nach_unten = false;
+						
+					}
+				}
+
+				if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
+				{
+					hm_viereck = false;
+					nach_unten = true;
+					
+				}
+
+
+			}
+
+			
+
+
 
 	}
 };
