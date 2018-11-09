@@ -72,7 +72,7 @@ public:
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
-	double v = 5;															
+	double v = 7;															
 	double run = 0;
 	int zaehler=0;
 	int zaehler_v = 0;
@@ -277,9 +277,6 @@ public:
 		{
 			//Einlesen der Levels
 			ifstream f(".//Level1.txt");
-			//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
-			//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-
 			
 			string zeile;
 			while (getline(f, zeile))
@@ -322,7 +319,7 @@ public:
 			y_koordinate_Figur = jump +10;
 		}
 
-		if (zähler_springen_runter == 90)
+		if (jump==430)
 		{
 			nach_unten = false;
 			zähler_springen_runter = 0;
@@ -358,7 +355,7 @@ public:
 			}
 		}
 
-		if ((abs(diffx < 10)) && (abs(diffy < 10)))
+		if ((abs(diffx < 20)) && (abs(diffy < 20)))
 		{
 			crash = true;
 		}
@@ -366,7 +363,8 @@ public:
 
 		if (crash)
 		{
-			cout << "tod" << endl;
+			Sleep(2000);
+			start = true;
 		}
 
 
@@ -431,7 +429,7 @@ public:
 			for (auto i = 0; i < viereck.size(); i++)
 			{		
 				
-				if (viereck.at(i).xl >= 290 || viereck.at(i).xr <= 250)
+				if (viereck.at(i).xl >= 220 || viereck.at(i).xr <= 200)
 				{
 					hm_viereck = false;
 				}
@@ -449,23 +447,8 @@ public:
 					}
 
 				}
-				if (start)
-				{
-					cout << viereck.at(i).xr << endl;
-				}
-				if (viereck.at(i).xr==210 &&hm_viereck)
-				{
-					jump = jump-40;
-					
-				}
-
-				/*if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
-				{
-					hm_viereck = false;
-
-				}*/
-
 				
+			
 
 			}
 
