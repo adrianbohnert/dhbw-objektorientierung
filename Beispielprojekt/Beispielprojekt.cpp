@@ -68,7 +68,6 @@ public:
 	//Start und Stop
 	bool start = false;
 	bool springen = false;
-	bool Tod = false;
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
@@ -91,6 +90,7 @@ public:
 	
 	bool lesen = true;
 	bool schleife = true;
+	bool reset=false;
 
 	//Zum Anzeigen des Huptbildschirmes
 	bool startbildschirm = false;
@@ -245,11 +245,6 @@ public:
 
 		schleife = false;
 
-				/*	for (auto i = 0; i < xd.size(); i++)
-					{
-
-					}
-				*/
 
 
 				//Spielfigur
@@ -302,7 +297,7 @@ public:
 			springen = true;
 		}
 		
-
+		y_koordinate_Figur = jump + 10;
 		if (springen&&!nach_unten)
 		{
 			jump=jump-high;
@@ -343,20 +338,19 @@ public:
 			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-			//	cout << "x_differenz: " << diffx << endl; ;
+			
 			
 			}
 			
 		}
-	//	cout << y_koordinate_Figur << endl;
+		
 		
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
 			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >=190))
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-			//cout << "y_differenz: " << diffy << endl; ;
-			//	cout << y_koordinate_Figur << endl;
+			
 			}
 		}
 
@@ -368,7 +362,8 @@ public:
 
 		if (crash)
 		{
-			startbildschirm = true;
+			Sleep(2000);
+			startbildschirm = false;
 			
 		}
 
@@ -467,7 +462,19 @@ public:
 
 			}
 
-			
+			if (reset)
+			{
+				start = false; 
+				springen = false;
+				crash = false;
+				zähler_springen_hoch = 0;
+				zähler_springen_runter = 0;
+				nach_unten = 0;
+				hm_viereck = false;
+				lesen = true;
+				schleife = true;
+				reset = false;
+			}
 
 
 
