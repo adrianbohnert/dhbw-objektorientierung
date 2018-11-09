@@ -71,7 +71,7 @@ public:
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
-	double v = 7;															
+	double v = 5;															
 	double run = 0;
 	int zaehler=0;
 	int zaehler_v = 0;
