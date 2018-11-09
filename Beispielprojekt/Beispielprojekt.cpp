@@ -51,6 +51,7 @@ public:
 
 	forward_list<double> x_Koordinate_Dreiecke;
 	forward_list<double> y_Koordinate_Dreiecke;
+	
 	vector<string> map;
 
 
@@ -302,35 +303,36 @@ public:
 		);*/
 
 
-		int x = 0;
+		
 
-		for (auto spalten = 0; spalten < map.size(); spalten++) {
-			int y = 0;
+		for (auto x = 0; x < map.size(); x++) {
+			
 
-			for (auto zeilen = 0; zeilen < 5;zeilen ++) {
+			for (auto y = 0; y <map[x].size() ;y ++) {
 				
 				
-				switch 		()																	//muss noch gemacht werden !!!!!!
-					case '>':			graphics().draw_triangle(
-										x *göße_hindernisse,  y * göße_hindernisse, Gosu::Color::BLACK,
+				switch (map[x][y]) {
+																													//Fehler von den Positionen !!!!!!
+				case '>':			graphics().draw_triangle(
+										x *göße_hindernisse, y * göße_hindernisse, Gosu::Color::BLACK,
 										x * göße_hindernisse + 20, (y + 1) * 40, Gosu::Color::BLACK,
 										(x + 1) * göße_hindernisse, y * göße_hindernisse, Gosu::Color::BLACK,
 										0.0
-										); break;
+									); break;
+
+				case '|':			graphics().draw_quad(
+									x*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
+									(x + 1)*göße_hindernisse, (y + 1)*göße_hindernisse, Gosu::Color::BLACK,
+									(x + 1)*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
+									x*göße_hindernisse, (y + 1)*göße_hindernisse, Gosu::Color::BLACK,
+									0.0
+								); break;
+
+				}
 				
-					case '|' :			graphics().draw_quad(
-										x*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
-										(x+1)*göße_hindernisse, (y+1)*göße_hindernisse, Gosu::Color::BLACK,
-										(x+1)*göße_hindernisse, y*göße_hindernisse, Gosu::Color::BLACK,
-										x*göße_hindernisse, (y + 1)*göße_hindernisse, Gosu::Color::BLACK,
-										0.0
-										); break; 
 				
-				
-				
-				y += 1;
 			}
-			x += 1;
+			
 		}
 
 
@@ -348,7 +350,7 @@ public:
 	// Wird 60x pro Sekunde aufgerufen
 	void update() override
 	{
-		ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\hallo.txt");
+		ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\map.txt");
 		string zeile;
 		while (getline(f,zeile))
 		{
