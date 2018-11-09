@@ -62,9 +62,9 @@ public:
 	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
 	double y_koordinate_Figur = jump - 10;								//y_Korrdinate Mitte Spielfigur
 	double jump = 430;													//Startpunkt der Figur
-	double high = 60;													//Sprunghöhe	
-	double down = 5;													//Falltiefe
-	
+	double high = 5;													//Sprunghöhe	
+	bool nach_unten = false;
+
 	//Start und Stop
 	bool start = false;
 	bool springen = false;
@@ -72,10 +72,12 @@ public:
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
-	double v = 0.1;															
+	double v = 5;															
 	double run = 0;
 	int zaehler=0;
 	int zaehler_v = 0;
+	int zähler_springen_hoch=0;
+	int zähler_springen_runter = 0;
 
 	//Spielfeld und Hindernissgröße
 	double spielfeld = 450;												// y_Position des Spielfeldes
@@ -215,7 +217,7 @@ public:
 						{
 
 							graphics().draw_quad(
-								viereck.at(i ).xl, viereck.at(i).yu, Gosu::Color::BLACK,
+								viereck.at(i).xl, viereck.at(i).yu, Gosu::Color::BLACK,
 								viereck.at(i).xr, viereck.at(i).yu, Gosu::Color::BLACK,
 								viereck.at(i).xl, viereck.at(i).yo, Gosu::Color::BLACK,
 								viereck.at(i).xr, viereck.at(i).yo, Gosu::Color::BLACK,
@@ -272,7 +274,9 @@ public:
 		{
 			//Einlesen der Levels
 			//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-			ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+			//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+			ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+
 			
 			string zeile;
 			while (getline(f, zeile))
@@ -292,23 +296,36 @@ public:
 		{
 			springen = true;
 		}
-		else
+		/*else
 		{
 			springen = false;
-		}
+		}*/
 		
 		//Flankenmerker zum Springen
-		if (SteigendeFlanke(springen))
+		if (springen&&!nach_unten)
 		{
-			jump = jump - high;
+			jump=jump-high;
+			zähler_springen_hoch= zähler_springen_hoch+high;
 		}
 
-		if(jump !=430)
+		if (zähler_springen_hoch == 90)
 		{
-			jump = jump + down;
+			springen = false;
+			nach_unten = true;
+			zähler_springen_hoch = 0;
 		}
 
-		
+		if(nach_unten)
+		{
+			jump =jump + high;
+			zähler_springen_runter= zähler_springen_runter+high;
+		}
+
+		if (zähler_springen_runter == 90)
+		{
+			nach_unten = false;
+			zähler_springen_runter = 0;
+		}
 		
 		
 		
@@ -323,7 +340,7 @@ public:
 			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-				cout << "x_differenz: " << diffx << endl; ;
+				//cout << "x_differenz: " << diffx << endl; ;
 			
 			}
 			
@@ -335,7 +352,7 @@ public:
 			if (dreieck.at(i).xo <= 230)
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-				cout << "y_differenz: " << diffy << endl; ;
+				//cout << "y_differenz: " << diffy << endl; ;
 				
 			}
 		}
@@ -369,19 +386,19 @@ public:
 			if (start == true)
 			{
 				
-					run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
+					//run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
 					for (auto i = dreieck.begin(); i != dreieck.end(); i++)
 					{
-						(i->xl) = (i->xl) - run; // wird im run nach links verschoben und in Vektor gespeichert
-						(i->xr) = (i->xr) - run;
-						(i->xo) = (i->xo) - run;
+						(i->xl) = (i->xl) - v; // wird im run nach links verschoben und in Vektor gespeichert
+						(i->xr) = (i->xr) - v;
+						(i->xo) = (i->xo) - v;
 
 					}
 
 					for (auto i = viereck.begin(); i != viereck.end(); i++)
 					{
-						(i->xl) = (i->xl) - run;
-						(i->xr) = (i->xr) - run;
+						(i->xl) = (i->xl) - v;
+						(i->xr) = (i->xr) - v;
 
 					}
 					Sleep(10);
@@ -393,6 +410,7 @@ public:
 			if (Stop || crash)																			//Stopmerker
 			{
 				start = false;
+				Spielsong.stop();
 			}
 			
 			//Startbildschirm aufplotten lassen
