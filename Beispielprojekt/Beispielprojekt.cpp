@@ -68,7 +68,6 @@ public:
 	//Start und Stop
 	bool start = false;
 	bool springen = false;
-	bool Tod = false;
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
@@ -91,6 +90,7 @@ public:
 	
 	bool lesen = true;
 	bool schleife = true;
+	bool reset=false;
 
 	//Zum Anzeigen des Huptbildschirmes
 	bool startbildschirm = false;
@@ -245,11 +245,6 @@ public:
 
 		schleife = false;
 
-				/*	for (auto i = 0; i < xd.size(); i++)
-					{
-
-					}
-				*/
 
 
 				//Spielfigur
@@ -291,13 +286,15 @@ public:
 		
 		//Einlesen der Springtaste ->Leertaste
 		bool Springen = input().down(Gosu::ButtonName::KB_SPACE);							
-	
+		
+		
 		if (Springen)																			
 		{
+			
 			springen = true;
 		}
 		
-
+		y_koordinate_Figur = jump + 10;
 		if (springen&&!nach_unten)
 		{
 			jump=jump-high;
@@ -319,7 +316,7 @@ public:
 			y_koordinate_Figur = jump +10;
 		}
 
-		if (jump==430)
+		if (jump ==430)
 		{
 			nach_unten = false;
 			zähler_springen_runter = 0;
@@ -338,20 +335,19 @@ public:
 			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-			//	cout << "x_differenz: " << diffx << endl; ;
+			
 			
 			}
 			
 		}
-	//	cout << y_koordinate_Figur << endl;
+		
 		
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
 			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >=190))
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-			//cout << "y_differenz: " << diffy << endl; ;
-			//	cout << y_koordinate_Figur << endl;
+			
 			}
 		}
 
@@ -364,7 +360,8 @@ public:
 		if (crash)
 		{
 			Sleep(2000);
-			start = true;
+			startbildschirm = false;
+			
 		}
 
 
@@ -445,14 +442,36 @@ public:
 						nach_unten = false;
 						
 					}
-
+					
+					break;
 				}
-				
+				else
+				{
+					
+					if (jump == 390 && springen == false)
+					{
+						nach_unten = true;
+					}
+					
+				}
 			
+				
 
 			}
 
-			
+			if (reset)
+			{
+				start = false; 
+				springen = false;
+				crash = false;
+				zähler_springen_hoch = 0;
+				zähler_springen_runter = 0;
+				nach_unten = 0;
+				hm_viereck = false;
+				lesen = true;
+				schleife = true;
+				reset = false;
+			}
 
 
 
