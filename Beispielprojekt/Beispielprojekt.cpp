@@ -45,13 +45,14 @@ public:
 class GameWindow : public Gosu::Window
 {
 public:
-	Gosu::Image Spielfigur, Hintergrund, Startbildschirm;
+	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Ende;
 	Gosu::Song Spielsong;
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
 		, Startbildschirm("Startbildschirm.png")
+		, Ende("Ende.png")
 		, Spielsong("The Caribbean Theme Song.mp3")
 	{
 		set_caption("square Game");
@@ -67,12 +68,12 @@ public:
 
 	//Start und Stop
 	bool start = false;
+	bool reset=false;
 	bool springen = false;
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
 	double v = 5;															
-	double run = 0;
 	int zaehler=0;
 	int zaehler_v = 0;
 	int zähler_springen_hoch=0;
@@ -90,7 +91,7 @@ public:
 	
 	bool lesen = true;
 	bool schleife = true;
-	bool reset=false;
+	
 
 	//Zum Anzeigen des Huptbildschirmes
 	bool startbildschirm = false;
@@ -257,7 +258,11 @@ public:
 					Startbildschirm.draw(0, 0, 0, 1, 1);
 				}
 
-
+				if (crash)
+				{
+					Sleep(100);
+					Ende.draw(0, 0, 0, 1, 1);
+				}
 	}
 
 
@@ -268,167 +273,104 @@ public:
 	void update() override
 	{
 
-		if (lesen) // wird genau ein mal ausgelesen
-		{
-			//Einlesen der Levels
-			ifstream f(".//Level1.txt");
-			//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
-			//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+		bool Start = input().down(Gosu::ButtonName::KB_S);						//Einlesen der "S" Taste ->Start des Bilddurchlaufes
+		bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der "B" ->Stop des Bilddurchlaufes
+		bool Return = input().down(Gosu::ButtonName::KB_R);						// Einlesen der Taste "R" für Zurücksetzen
 
+		if (Start)
+		{
 			
-			string zeile;
-			while (getline(f, zeile))
+			startbildschirm = true ;//Startbildschirm aufplotten lassen
+			Sleep(100);
+			start = true;
+			
+			cout << "schleife" << endl;
+		}
+
+		
+			if (lesen) // wird genau ein mal ausgelesen	
 			{
-				map.push_back(zeile);
-			}
-			lesen = false;
-		}
+				//Einlesen der Levels
+				ifstream f(".//Level1.txt");
+				//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+				//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
 
 
-		
-		
-		//Einlesen der Springtaste ->Leertaste
-		bool Springen = input().down(Gosu::ButtonName::KB_SPACE);							
-		
-		
-		if (Springen)																			
-		{
-			
-			springen = true;
-		}
-		
-		y_koordinate_Figur = jump + 10;
-		if (springen&&!nach_unten)
-		{
-			jump=jump-high;
-			zähler_springen_hoch = zähler_springen_hoch+high;
-			y_koordinate_Figur =jump + 10;
-		}
-
-		if (zähler_springen_hoch == 90)
-		{
-			springen = false;
-			nach_unten = true;
-			zähler_springen_hoch = 0;
-		}
-
-		if(nach_unten)
-		{
-			jump =jump + high;
-			zähler_springen_runter= zähler_springen_runter+high;
-			y_koordinate_Figur = jump +10;
-		}
-
-		if (jump ==430)
-		{
-			nach_unten = false;
-			zähler_springen_runter = 0;
-		}
-		
-		
-		
-		
-
-		double diffx=400;
-		double diffy=400;
-
-		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
-		{
-			
-			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
-			{
-				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-			
-			
-			}
-			
-		}
-		
-		
-		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
-		{
-			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >=190))
-			{
-				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-			
-			}
-		}
-
-		if ((abs(diffx < 10)) && (abs(diffy < 10)))
-		{
-			crash = true;
-		}
-
-
-		if (crash)
-		{
-			Sleep(2000);
-			startbildschirm = false;
-			
-		}
-
-
-
-		
-			bool Start = input().down(Gosu::ButtonName::KB_S);						//Einlesen der "S" Taste ->Start des Bilddurchlaufes
-			bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der "B" ->Stop des Bilddurchlaufes
-
-			if (Start)
-			{
-				start = true;
+				string zeile;
+				while (getline(f, zeile))
+				{
+					map.push_back(zeile);
+				}
+				lesen = false;
 			}
 
-			if (start == false || crash == true)
-			{
-				run = 0;
-			}
+
+
+
 			if (start == true)
 			{
-				
-					//run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
-					for (auto i = dreieck.begin(); i != dreieck.end(); i++)
-					{
-						(i->xl) = (i->xl) - v; // wird im run nach links verschoben und in Vektor gespeichert
-						(i->xr) = (i->xr) - v;
-						(i->xo) = (i->xo) - v;
 
-					}
 
-					for (auto i = viereck.begin(); i != viereck.end(); i++)
-					{
-						(i->xl) = (i->xl) - v;
-						(i->xr) = (i->xr) - v;
+				for (auto i = dreieck.begin(); i != dreieck.end(); i++)
+				{
+					(i->xl) = (i->xl) - v;
+					(i->xr) = (i->xr) - v;
+					(i->xo) = (i->xo) - v;
 
-					}
-					Sleep(10);
-				
+				}
+
+				for (auto i = viereck.begin(); i != viereck.end(); i++)
+				{
+					(i->xl) = (i->xl) - v;
+					(i->xr) = (i->xr) - v;
+
+				}
+				Sleep(10);
+
 			}
 
-			
+			//Einlesen der Springtaste ->Leertaste
+			bool Springen = input().down(Gosu::ButtonName::KB_SPACE);
 
-			if (Stop || crash)																			//Stopmerker
+
+			if (Springen)
 			{
-				start = false;
-				Spielsong.stop();
-			}
-			
-			//Startbildschirm aufplotten lassen
-			if (Start)
-			{
-				startbildschirm = true;
-			}
-			
-			if (start)
-			{
-				punkte ++;
-				Spielsong.play();
+
+				springen = true;
 			}
 
-			
-			
+			y_koordinate_Figur = jump + 10;
+			if (springen && !nach_unten)
+			{
+				jump = jump - high;
+				zähler_springen_hoch = zähler_springen_hoch + high;
+				y_koordinate_Figur = jump + 10;
+			}
+
+			if (zähler_springen_hoch == 90)
+			{
+				springen = false;
+				nach_unten = true;
+				zähler_springen_hoch = 0;
+			}
+
+			if (nach_unten)
+			{
+				jump = jump + high;
+				zähler_springen_runter = zähler_springen_runter + high;
+				y_koordinate_Figur = jump + 10;
+			}
+
+			if (jump == 430)
+			{
+				nach_unten = false;
+				zähler_springen_runter = 0;
+			}
+
+
 			for (auto i = 0; i < viereck.size(); i++)
-			{		
-				
+			{
+
 				if (viereck.at(i).xl >= 220 || viereck.at(i).xr <= 200)
 				{
 					hm_viereck = false;
@@ -440,45 +382,113 @@ public:
 
 				if (hm_viereck)
 				{
-					if (y_koordinate_Figur -5 <400 && y_koordinate_Figur >=400 )
+					if (y_koordinate_Figur - 5 < 400 && y_koordinate_Figur >= 400)
 					{
 						nach_unten = false;
-						
+
 					}
-					
+
 					break;
 				}
 				else
 				{
-					
+
 					if (jump == 390 && springen == false)
 					{
 						nach_unten = true;
 					}
-					
-				}
-			
-				
 
+				}
+
+
+
+			}
+
+
+			double diffx = 400;
+			double diffy = 400;
+
+			for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
+			{
+
+				if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
+				{
+					diffx = dreieck.at(i).xo - x_koordinate_Figur;
+
+
+				}
+
+			}
+
+
+			for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
+			{
+				if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190))
+				{
+					diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
+
+				}
+			}
+
+			if ((abs(diffx < 10)) && (abs(diffy < 10)))
+			{
+				crash = true;
+			}
+
+
+
+			if (Stop || crash)																			//Stopmerker
+			{
+				start = false;
+				Spielsong.stop();
+			}
+
+
+			if (start)
+			{
+				punkte++;
+				Spielsong.play();
+			}
+
+
+			if (Return)
+			{	
+				reset = true;
 			}
 
 			if (reset)
 			{
-				start = false; 
-				springen = false;
+			
+				dreieck.clear();
+				viereck.clear();
+
+
+				zaehler = 0;
+				zaehler_v = 0;
+
+				
+				schleife = true;
+				
+
+				startbildschirm = false;
+				diffx = 400;
+				diffy = 400;
 				crash = false;
+				springen = false;
+				nach_unten = false;
 				zähler_springen_hoch = 0;
 				zähler_springen_runter = 0;
-				nach_unten = 0;
 				hm_viereck = false;
-				lesen = true;
-				schleife = true;
+				jump = 430;
+
+
 				reset = false;
 			}
-
-
+			
+		
 
 	}
+	
 };
 
 
