@@ -59,9 +59,9 @@ public:
 
 
 	//Koordinaten der Figur
+	double jump = 430;	
 	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
-	double y_koordinate_Figur = jump - 10;								//y_Korrdinate Mitte Spielfigur
-	double jump = 430;													//Startpunkt der Figur
+	double y_koordinate_Figur = 0;						//y_Korrdinate Mitte Spielfigur											//Startpunkt der Figur
 	double high = 5;													//Sprunghöhe	
 	bool nach_unten = false;
 
@@ -273,9 +273,9 @@ public:
 		if (lesen) // wird genau ein mal ausgelesen
 		{
 			//Einlesen der Levels
-			//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+			ifstream f(".//Level1.txt");
 			//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
-			ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+			//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
 
 			
 			string zeile;
@@ -306,6 +306,7 @@ public:
 		{
 			jump=jump-high;
 			zähler_springen_hoch= zähler_springen_hoch+high;
+			y_koordinate_Figur = jump + 10;
 		}
 
 		if (zähler_springen_hoch == 90)
@@ -319,6 +320,7 @@ public:
 		{
 			jump =jump + high;
 			zähler_springen_runter= zähler_springen_runter+high;
+			y_koordinate_Figur = jump +10;
 		}
 
 		if (zähler_springen_runter == 90)
@@ -336,28 +338,27 @@ public:
 
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
-			 
-			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
+			
+			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-				//cout << "x_differenz: " << diffx << endl; ;
-			
+			cout << dreieck.at(i).xo  << endl; ;
 			}
 			
 		}
-
+	//	cout << y_koordinate_Figur << endl;
 		
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
-			if (dreieck.at(i).xo <= 230)
+			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >=190))
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-				//cout << "y_differenz: " << diffy << endl; ;
-				
+			//cout << "y_differenz: " << diffy << endl; ;
+			//	cout << y_koordinate_Figur << endl;
 			}
 		}
 
-		if ((diffx < 40) && (diffy < 40))
+		if ((abs(diffx < 10)) && (abs(diffy < 10)))
 		{
 			crash = true;
 		}
