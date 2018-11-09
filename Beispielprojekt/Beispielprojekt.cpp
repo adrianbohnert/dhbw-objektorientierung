@@ -59,12 +59,12 @@ public:
 
 
 	//Koordinaten der Figur
+	double jump = 430;	
 	double x_koordinate_Figur = 210;									//x_Korrdinate Mitte Spielfigur
-	double y_koordinate_Figur = jump - 10;								//y_Korrdinate Mitte Spielfigur
-	double jump = 430;													//Startpunkt der Figur
-	double high = 60;													//Sprunghöhe	
-	double down = 5;													//Falltiefe
-	
+	double y_koordinate_Figur = 0;						//y_Korrdinate Mitte Spielfigur											//Startpunkt der Figur
+	double high = 5;													//Sprunghöhe	
+	bool nach_unten = false;
+
 	//Start und Stop
 	bool start = false;
 	bool springen = false;
@@ -72,14 +72,19 @@ public:
 	bool crash = false;
 
 	//Durchlaufgeschwindigkeit
-	double v = 0.1;															
+	double v = 5;															
 	double run = 0;
 	int zaehler=0;
 	int zaehler_v = 0;
+	int zähler_springen_hoch=0;
+	int zähler_springen_runter = 0;
 
 	//Spielfeld und Hindernissgröße
 	double spielfeld = 450;												// y_Position des Spielfeldes
 	double göße_hindernisse = 40;										// Abstände der einzelnen koordinaten der Hindernisse
+	bool hm_viereck=false;
+
+	
 	
 
 	
@@ -215,7 +220,7 @@ public:
 						{
 
 							graphics().draw_quad(
-								viereck.at(i ).xl, viereck.at(i).yu, Gosu::Color::BLACK,
+								viereck.at(i).xl, viereck.at(i).yu, Gosu::Color::BLACK,
 								viereck.at(i).xr, viereck.at(i).yu, Gosu::Color::BLACK,
 								viereck.at(i).xl, viereck.at(i).yo, Gosu::Color::BLACK,
 								viereck.at(i).xr, viereck.at(i).yo, Gosu::Color::BLACK,
@@ -271,8 +276,10 @@ public:
 		if (lesen) // wird genau ein mal ausgelesen
 		{
 			//Einlesen der Levels
-			//ifstream f("C:\\Users\\sofia\\source\\repos\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
-			ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+			ifstream f(".//Level1.txt");
+			//ifstream f("C:\\Users\\adria\\Documents\\Studium\\3. Semester\\Informatik 3\\Spiel\\Eigenes Spiel\\Beispielprojekt\\Level1.txt");
+			//ifstream f("H:\\Informatik\\Informatik 3\\dhbw-objektorientierung\\Beispielprojekt\\Level1.txt");
+
 			
 			string zeile;
 			while (getline(f, zeile))
@@ -292,23 +299,34 @@ public:
 		{
 			springen = true;
 		}
-		else
+		
+
+		if (springen&&!nach_unten)
+		{
+			jump=jump-high;
+			zähler_springen_hoch = zähler_springen_hoch+high;
+			y_koordinate_Figur =jump + 10;
+		}
+
+		if (zähler_springen_hoch == 90)
 		{
 			springen = false;
-		}
-		
-		//Flankenmerker zum Springen
-		if (SteigendeFlanke(springen))
-		{
-			jump = jump - high;
+			nach_unten = true;
+			zähler_springen_hoch = 0;
 		}
 
-		if(jump !=430)
+		if(nach_unten)
 		{
-			jump = jump + down;
+			jump =jump + high;
+			zähler_springen_runter= zähler_springen_runter+high;
+			y_koordinate_Figur = jump +10;
 		}
 
-		
+		if (zähler_springen_runter == 90)
+		{
+			nach_unten = false;
+			zähler_springen_runter = 0;
+		}
 		
 		
 		
@@ -319,28 +337,28 @@ public:
 
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
 		{
-			 
-			if (dreieck.at(i).xo<= 230) // 230 durch ausprobieren!
+			
+			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-				cout << "x_differenz: " << diffx << endl; ;
+			//	cout << "x_differenz: " << diffx << endl; ;
 			
 			}
 			
 		}
-
+	//	cout << y_koordinate_Figur << endl;
 		
 		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
 		{
-			if (dreieck.at(i).xo <= 230)
+			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >=190))
 			{
 				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-				cout << "y_differenz: " << diffy << endl; ;
-				
+			//cout << "y_differenz: " << diffy << endl; ;
+			//	cout << y_koordinate_Figur << endl;
 			}
 		}
 
-		if ((diffx < 40) && (diffy < 40))
+		if ((abs(diffx < 10)) && (abs(diffy < 10)))
 		{
 			crash = true;
 		}
@@ -369,19 +387,19 @@ public:
 			if (start == true)
 			{
 				
-					run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
+					//run = run + v; // Run wird immer größer, somit wird geschwindigkeit höher.. Wollen wir das ? wenn nicht minus v 
 					for (auto i = dreieck.begin(); i != dreieck.end(); i++)
 					{
-						(i->xl) = (i->xl) - run; // wird im run nach links verschoben und in Vektor gespeichert
-						(i->xr) = (i->xr) - run;
-						(i->xo) = (i->xo) - run;
+						(i->xl) = (i->xl) - v; // wird im run nach links verschoben und in Vektor gespeichert
+						(i->xr) = (i->xr) - v;
+						(i->xo) = (i->xo) - v;
 
 					}
 
 					for (auto i = viereck.begin(); i != viereck.end(); i++)
 					{
-						(i->xl) = (i->xl) - run;
-						(i->xr) = (i->xr) - run;
+						(i->xl) = (i->xl) - v;
+						(i->xr) = (i->xr) - v;
 
 					}
 					Sleep(10);
@@ -393,6 +411,7 @@ public:
 			if (Stop || crash)																			//Stopmerker
 			{
 				start = false;
+				Spielsong.stop();
 			}
 			
 			//Startbildschirm aufplotten lassen
@@ -406,6 +425,53 @@ public:
 				punkte ++;
 				Spielsong.play();
 			}
+
+			
+			
+			for (auto i = 0; i < viereck.size(); i++)
+			{		
+				
+				if (viereck.at(i).xl >= 290 || viereck.at(i).xr <= 250)
+				{
+					hm_viereck = false;
+				}
+				else
+				{
+					hm_viereck = true;
+				}
+
+				if (hm_viereck)
+				{
+					if (y_koordinate_Figur -5 <400 && y_koordinate_Figur >=400 )
+					{
+						nach_unten = false;
+						
+					}
+
+				}
+				if (start)
+				{
+					cout << viereck.at(i).xr << endl;
+				}
+				if (viereck.at(i).xr==210 &&hm_viereck)
+				{
+					jump = jump-40;
+					
+				}
+
+				/*if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
+				{
+					hm_viereck = false;
+
+				}*/
+
+				
+
+			}
+
+			
+
+
 
 	}
 };
