@@ -294,9 +294,11 @@ public:
 		
 		//Einlesen der Springtaste ->Leertaste
 		bool Springen = input().down(Gosu::ButtonName::KB_SPACE);							
-	
+		
+		
 		if (Springen)																			
 		{
+			
 			springen = true;
 		}
 		
@@ -322,7 +324,7 @@ public:
 			y_koordinate_Figur = jump +10;
 		}
 
-		if (zähler_springen_runter == 90)
+		if (jump ==430)
 		{
 			nach_unten = false;
 			zähler_springen_runter = 0;
@@ -431,7 +433,7 @@ public:
 			for (auto i = 0; i < viereck.size(); i++)
 			{		
 				
-				if (viereck.at(i).xl >= 290 || viereck.at(i).xr <= 250)
+				if (viereck.at(i).xl >= 220 || viereck.at(i).xr <= 200)
 				{
 					hm_viereck = false;
 				}
@@ -447,24 +449,19 @@ public:
 						nach_unten = false;
 						
 					}
-
+					
+					break;
 				}
-				if (start)
+				else
 				{
-					cout << viereck.at(i).xr << endl;
-				}
-				if (viereck.at(i).xr==210 &&hm_viereck)
-				{
-					jump = jump-40;
+					
+					if (jump == 390 && springen == false)
+					{
+						nach_unten = true;
+					}
 					
 				}
-
-				/*if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
-				{
-					hm_viereck = false;
-
-				}*/
-
+			
 				
 
 			}
