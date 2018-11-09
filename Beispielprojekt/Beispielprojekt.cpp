@@ -368,7 +368,8 @@ public:
 
 		if (crash)
 		{
-			cout << "tod" << endl;
+			startbildschirm = true;
+			
 		}
 
 
