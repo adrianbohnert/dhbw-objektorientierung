@@ -83,6 +83,7 @@ public:
 	double spielfeld = 450;												// y_Position des Spielfeldes
 	double göße_hindernisse = 40;										// Abstände der einzelnen koordinaten der Hindernisse
 	bool hm_viereck=false;
+
 	
 	
 
@@ -298,12 +299,8 @@ public:
 		{
 			springen = true;
 		}
-		/*else
-		{
-			springen = false;
-		}*/
 		
-		//Flankenmerker zum Springen
+
 		if (springen&&!nach_unten)
 		{
 			jump=jump-high;
@@ -344,7 +341,7 @@ public:
 			if ((dreieck.at(i).xo<= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
 			{
 				diffx = dreieck.at(i).xo - x_koordinate_Figur;
-				cout << "x_differenz: " << diffx << endl; ;
+			//	cout << "x_differenz: " << diffx << endl; ;
 			
 			}
 			
@@ -430,31 +427,45 @@ public:
 			}
 
 			
-
+			
 			for (auto i = 0; i < viereck.size(); i++)
 			{		
 				
-				if (viereck.at(i).xl == 250 && viereck.at(i).xr==290)
+				if (viereck.at(i).xl >= 290 || viereck.at(i).xr <= 250)
 				{
-					
+					hm_viereck = false;
+				}
+				else
+				{
 					hm_viereck = true;
 				}
+
 				if (hm_viereck)
 				{
-					if (y_koordinate_Figur == 400)
+					if (y_koordinate_Figur -5 <400 && y_koordinate_Figur >=400 )
 					{
 						nach_unten = false;
 						
 					}
-				}
 
-				if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
+				}
+				if (start)
 				{
-					hm_viereck = false;
-					nach_unten = true;
+					cout << viereck.at(i).xr << endl;
+				}
+				if (viereck.at(i).xr==210 &&hm_viereck)
+				{
+					jump = jump-40;
 					
 				}
 
+				/*if ((viereck.at(i).xr == 210)&& (viereck.at(i+1).xr == 250))
+				{
+					hm_viereck = false;
+
+				}*/
+
+				
 
 			}
 
