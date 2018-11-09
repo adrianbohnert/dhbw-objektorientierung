@@ -45,14 +45,17 @@ public:
 class GameWindow : public Gosu::Window
 {
 public:
-	Gosu::Image Spielfigur, Hintergrund, Startbildschirm;
+	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Level_geschafft;
 	Gosu::Song Spielsong;
+	
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
 		, Startbildschirm("Startbildschirm.png")
 		, Spielsong("The Caribbean Theme Song.mp3")
+		, Level_geschafft("Level_geschafft.png")
+		
 	{
 		set_caption("square Game");
 	}
@@ -257,6 +260,11 @@ public:
 					Startbildschirm.draw(0, 0, 0, 1, 1);
 				}
 
+				/*for (auto i = dreieck.begin(); i != dreieck.end(); i++)
+					if (dreieck.at(i + 1)xr)
+				{
+					Level_geschafft.draw(0, 0, 0, 1, 1);
+				}*/
 
 	}
 
@@ -417,8 +425,11 @@ public:
 			
 			if (start)
 			{
+				
 				punkte ++;
+				cout << punkte << endl;
 				Spielsong.play();
+				Sleep(1);
 			}
 
 			
@@ -473,7 +484,7 @@ public:
 				reset = false;
 			}
 
-
+			
 
 	}
 };
