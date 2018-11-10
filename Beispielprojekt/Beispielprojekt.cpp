@@ -426,10 +426,10 @@ public:
 			if (start)
 			{
 				
-				punkte ++;
-				cout << punkte << endl;
+				//punkte ++;
+				//cout << punkte << endl;
 				Spielsong.play();
-				Sleep(1);
+				//Sleep(1);
 			}
 
 			
