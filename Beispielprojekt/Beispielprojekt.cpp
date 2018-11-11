@@ -45,18 +45,24 @@ public:
 class GameWindow : public Gosu::Window
 {
 public:
-	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Level_geschafft,Ende, Level;
-	Gosu::Song Spielsong;
-	
+	Gosu::Image Spielfigur, Hintergrund, Startbildschirm, Level_geschafft,Ende, Level,Pausenbild;
+	Gosu::Song Spielsong1, Spielsong2;
+	Gosu::Font Pausenanzeige, Prozentanzeige;
+
 	GameWindow()
 		: Window(800, 600)
 		, Spielfigur("Spielfigur_1.png")
 		, Hintergrund("Hintergrund.jpg")
 		, Startbildschirm("Startbildschirm.png")
+		, Pausenbild ("Pause.png")
 		, Ende("Ende.png")
-		, Spielsong("The Caribbean Theme Song.mp3")
+		, Spielsong1("The Caribbean Theme Song.mp3")
+		, Spielsong2("Geometry Dash level 2.mp3")
 		, Level_geschafft("Level_geschafft.png")
 		, Level ("Levelauswahl.png")
+		, Pausenanzeige(40)
+		, Prozentanzeige(70)
+
 		
 	{
 		set_caption("square Game");
@@ -82,6 +88,7 @@ public:
 
 	//Zum anzeigen der Levelauswahl
 	bool levelauswahl = true;
+	 
 
 	//Durchlaufgeschwindigkeit
 	double v = 5;	
@@ -105,8 +112,14 @@ public:
 	//Zum (nicht) Anzeigen des Hauptbildschirmes
 	bool startbildschirm = true; // true wenn Bild nicht angezeigt!
 
+	//Zum Anzeigen des Pausenbildschirms
+	bool Pausenbildschirm = false;
+
 	//Score anzeige
 	int punkte=0;
+	int Punkte_dif;
+	int wahre_differenz;
+	int letzer_x_wert;
 
 	//Mapvektor
 	vector<string> map;
@@ -115,7 +128,8 @@ public:
 	vector <Dreieck> dreieck;
 	vector <Viereck> viereck;
 
-
+	//String für Ausgabe von Pause
+	string Pause;
 
 
 	bool schleife = true; // Vektoren werden bestückt solange true
@@ -164,7 +178,7 @@ public:
 
 									dreieck.push_back(Dreieck(x*göße_hindernisse, (x + 1)*göße_hindernisse, x*göße_hindernisse + 20, y*göße_hindernisse + spielfeld, (y - 1)*göße_hindernisse + spielfeld));
 									zaehler++;
-									cout << "Test" << endl;
+									
 						}
 						
 						
@@ -282,12 +296,18 @@ public:
 					Level.draw(0, 0, 0, 1, 1);
 				}
 
-				/*for (auto i = dreieck.begin(); i != dreieck.end(); i++)
-					if (dreieck.at(i + 1)xr)
+				if (start)
 				{
-					Level_geschafft.draw(0, 0, 0, 1, 1);
-				}*/
+					Pausenanzeige.draw(Pause, 20, 20, 0, 1, 1);
+				}
 
+				if (Pausenbildschirm)																			//Stopmerker
+				{
+					Pausenbild.draw(0, 0, 0, 1, 1);
+					Prozentanzeige.draw(to_string(punkte), 200,600, 1, 1, 1);
+				}
+
+							
 	}
 
 
@@ -298,15 +318,19 @@ public:
 	void update() override
 	{
 
+		
+		bool Springen = input().down(Gosu::ButtonName::KB_SPACE);				//Einlesen der Springtaste ->Leertaste
 		bool Start = input().down(Gosu::ButtonName::KB_S);						//Einlesen der "S" Taste ->Start des Bilddurchlaufes
-		bool Stop = input().down(Gosu::ButtonName::KB_B);						//Einlesen der "B" ->Stop des Bilddurchlaufes
+		bool Stop = input().down(Gosu::ButtonName::KB_P);						//Einlesen der "B" ->Stop des Bilddurchlaufes
 		bool Return = input().down(Gosu::ButtonName::KB_R);						// Einlesen der Taste "R" für Zurücksetzen
 		bool L1 = input().down(Gosu::ButtonName::KB_1);							// Wenn Taste 1, dann Level 1
 		bool L2 = input().down(Gosu::ButtonName::KB_2);							// Wenn Taste 2, dann Level 2
 
+		Pause = "P fuer Pause ";												//Anzeige links oben im eck
+
 		if (L1)
 		{
-			level1 = true; 
+			level1 = true;
 		}
 
 		if (L2)
@@ -316,247 +340,270 @@ public:
 
 		if (Start)
 		{
-			
+
 			startbildschirm = true;//Spiel beginnt
 			Sleep(100);
 			start = true;
-			
+
 		}
 
-			//Einlesen der Levels
-		
-			if (lesen) // wird genau ein mal ausgelesen	
-			{
-				if (level1)
-				{
-					
-					ifstream f(".//Level1.txt");
+		//Einlesen der Levels
 
-					string zeile;
-					while (getline(f, zeile))
-					{
-						map.push_back(zeile);
-					}
-					
-
-					levelauswahl = false;
-					startbildschirm = false;
-					lesen = false;
-					merker = true; // Check, ob Karte ausgelesen wurde
-				}
-
-				if (level2)
-				{
-			
-					ifstream f(".//Level2.txt");
-					
-					string zeile;
-					while (getline(f, zeile))
-					{
-						map.push_back(zeile);
-					}
-					
-
-					levelauswahl = false;
-					startbildschirm = false;
-					lesen = false;
-					merker = true; // Check, ob Karte ausgelesen wurde
-					
-				}
-			
-			}
-
-
-
-
-			if (start == true)
+		if (lesen) // wird genau ein mal ausgelesen	
+		{
+			if (level1)
 			{
 
+				ifstream f(".//Level1.txt");
 
-				for (auto i = dreieck.begin(); i != dreieck.end(); i++)
+				string zeile;
+				while (getline(f, zeile))
 				{
-					(i->xl) = (i->xl) - v;
-					(i->xr) = (i->xr) - v;
-					(i->xo) = (i->xo) - v;
-
-				}
-
-				for (auto i = viereck.begin(); i != viereck.end(); i++)
-				{
-					(i->xl) = (i->xl) - v;
-					(i->xr) = (i->xr) - v;
-
-				}
-				Sleep(10);
-
-			}
-
-			//Einlesen der Springtaste ->Leertaste
-			bool Springen = input().down(Gosu::ButtonName::KB_SPACE);
-
-
-			if (Springen)
-			{
-
-				springen = true;
-			}
-
-			y_koordinate_Figur = jump + 10;
-			if (springen && !nach_unten)
-			{
-				jump = jump - high;
-				zähler_springen_hoch = zähler_springen_hoch + high;
-				y_koordinate_Figur = jump + 10;
-			}
-
-			if (zähler_springen_hoch == 90)
-			{
-				springen = false;
-				nach_unten = true;
-				zähler_springen_hoch = 0;
-			}
-
-			if (nach_unten)
-			{
-				jump = jump + high;
-				zähler_springen_runter = zähler_springen_runter + high;
-				y_koordinate_Figur = jump + 10;
-			}
-
-			if (jump == 430)
-			{
-				nach_unten = false;
-				zähler_springen_runter = 0;
-			}
-
-
-			for (auto i = 0; i < viereck.size(); i++)
-			{
-
-				if (viereck.at(i).xl >= 220 || viereck.at(i).xr <= 200)
-				{
-					hm_viereck = false;
-				}
-				else
-				{
-					hm_viereck = true;
-				}
-
-				if (hm_viereck)
-				{
-					if (y_koordinate_Figur - 5 < 400 && y_koordinate_Figur >= 400)
-					{
-						nach_unten = false;
-
-					}
-
-					break;
-				}
-				else
-				{
-
-					if (jump == 390 && springen == false)
-					{
-						nach_unten = true;
-					}
-
+					map.push_back(zeile);
 				}
 
 
-
+				levelauswahl = false;
+				startbildschirm = false;
+				lesen = false;
+				merker = true; // Check, ob Karte ausgelesen wurde
 			}
 
-
-			double diffx = 400;
-			double diffy = 400;
-
-			for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
+			if (level2)
 			{
 
-				if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
-				{
-					diffx = dreieck.at(i).xo - x_koordinate_Figur;
+				ifstream f(".//Level2.txt");
 
+				string zeile;
+				while (getline(f, zeile))
+				{
+					map.push_back(zeile);
 				}
 
+
+				levelauswahl = false;
+				startbildschirm = false;
+				lesen = false;
+				merker = true; // Check, ob Karte ausgelesen wurde
+
 			}
 
+		}
 
-			for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
+
+
+
+		if (start == true)
+		{
+			Pausenbildschirm = false;
+
+			//Wenn Letzes Dreieck unter die x_Koordinate 100 kommt ist Level beendet
+			if (dreieck.back().xr < 100)
 			{
-				if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190))
-				{
-					diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
-
-				}
-			}
-
-			if ((abs(diffx < 10)) && (abs(diffy < 10)))
-			{
+				Sleep(4000);
 				crash = true;
 			}
 
+			//DIffernez zwichen letztem dreieck und Spielfigur
+			letzer_x_wert = dreieck.back().xr;							//letze x_Koordinate
+			Punkte_dif = letzer_x_wert - 200;							//Differenz zwischen Figur und letze x_Koordinate
+			wahre_differenz = letzer_x_wert - Punkte_dif;				
+			punkte = wahre_differenz * (100 / wahre_differenz);			//ausrechnen Prozentualer Anteil
 
 
-			if (Stop || crash)																			//Stopmerker
+			for (auto i = dreieck.begin(); i != dreieck.end(); i++)
 			{
-				start = false;
-				Spielsong.stop();
+				(i->xl) = (i->xl) - v;
+				(i->xr) = (i->xr) - v;
+				(i->xo) = (i->xo) - v;
+
 			}
 
-
-			if (start)
+			for (auto i = viereck.begin(); i != viereck.end(); i++)
 			{
-				
-				//punkte ++;
-				//cout << punkte << endl;
-				Spielsong.play();
-				//Sleep(1);
+				(i->xl) = (i->xl) - v;
+				(i->xr) = (i->xr) - v;
+
 			}
+			Sleep(10);
+
+		}
+
+		
 
 
-			if (Return)
-			{	
-				reset = true;
-			}
+		if (Springen)
+		{
 
-			if (reset)
+			springen = true;
+		}
+
+		y_koordinate_Figur = jump + 10;
+		if (springen && !nach_unten)
+		{
+			jump = jump - high;
+			zähler_springen_hoch = zähler_springen_hoch + high;
+			y_koordinate_Figur = jump + 10;
+		}
+
+		if (zähler_springen_hoch == 90)
+		{
+			springen = false;
+			nach_unten = true;
+			zähler_springen_hoch = 0;
+		}
+
+		if (nach_unten)
+		{
+			jump = jump + high;
+			zähler_springen_runter = zähler_springen_runter + high;
+			y_koordinate_Figur = jump + 10;
+		}
+
+		if (jump == 430)
+		{
+			nach_unten = false;
+			zähler_springen_runter = 0;
+		}
+
+
+		for (auto i = 0; i < viereck.size(); i++)
+		{
+
+			if (viereck.at(i).xl >= 220 || viereck.at(i).xr <= 200)
 			{
-
-				// Leeren der Vektoren, sonst Performanceprobleme
-				map.clear();
-				dreieck.clear();
-				viereck.clear();
-
-
-				zaehler = 0;
-				zaehler_v = 0;
-
-				
-				schleife = true;
-				lesen = true;
-				merker = false;
-
-				// Es wird die Levelauswahl angezeigt, wenn Return
-				startbildschirm = true;
-				levelauswahl = true;
-
-				level1 = false;
-				level2 = false;
-
-				diffx = 400;
-				diffy = 400;
-				crash = false;
-				springen = false;
-				nach_unten = false;
-				zähler_springen_hoch = 0;
-				zähler_springen_runter = 0;
 				hm_viereck = false;
-				jump = 430;
-
-				// wird so nur ein Mal ausgeführt
-				reset = false;
 			}
+			else
+			{
+				hm_viereck = true;
+			}
+
+			if (hm_viereck)
+			{
+				if (y_koordinate_Figur - 5 < 400 && y_koordinate_Figur >= 400)
+				{
+					nach_unten = false;
+
+				}
+
+				break;
+			}
+			else
+			{
+
+				if (jump == 390 && springen == false)
+				{
+					nach_unten = true;
+				}
+
+			}
+
+
+
+		}
+
+
+		double diffx = 400;
+		double diffy = 400;
+
+		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des x-vectors und nach Diffdernz schauen
+		{
+
+			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190)) // 230 durch ausprobieren!
+			{
+				diffx = dreieck.at(i).xo - x_koordinate_Figur;
+
+			}
+
+		}
+
+
+		for (auto i = 0; i < dreieck.size(); i++)							//Durchgehen des y-Vectors und nach differenz schauen
+		{
+			if ((dreieck.at(i).xo <= 230) && (dreieck.at(i).xo >= 190))
+			{
+				diffy = 430 - y_koordinate_Figur;							// Y Koordinate ändert sich nicht 
+
+			}
+		}
+
+		if ((abs(diffx < 10)) && (abs(diffy < 10)))
+		{
+			crash = true;
+		}
+
+
+
+		if (Stop || crash)																			//Stopmerker
+		{
+			
+			start = false;
+			Spielsong1.stop();
+			Spielsong2.stop();
+		}
+		if (Stop)
+		{
+			Pausenbildschirm = true;
+		}
+
+
+		if (start&&level1)
+		{
+			Spielsong1.play();
+		}
+
+		if (start&&level2)
+		{
+			Spielsong2.play();
+		}
+
+
+		if (Return)
+		{
+			reset = true;
+		}
+
+		if (reset)
+		{
+
+			// Leeren der Vektoren, sonst Performanceprobleme
+			map.clear();
+			dreieck.clear();
+			viereck.clear();
+
+
+			zaehler = 0;
+			zaehler_v = 0;
+
+
+			schleife = true;
+			lesen = true;
+			merker = false;
+
+			// Es wird die Levelauswahl angezeigt, wenn Return
+			startbildschirm = true;
+			levelauswahl = true;
+
+			level1 = false;
+			level2 = false;
+
+			diffx = 400;
+			diffy = 400;
+			crash = false;
+			springen = false;
+			nach_unten = false;
+			zähler_springen_hoch = 0;
+			zähler_springen_runter = 0;
+			hm_viereck = false;
+			jump = 430;
+
+			// wird so nur ein Mal ausgeführt
+			reset = false;
+		}
+
+		
+
 
 
 	}
