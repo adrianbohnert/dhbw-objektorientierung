@@ -55,11 +55,11 @@ public:
 		, Hintergrund("Hintergrund.jpg")
 		, Startbildschirm("Startbildschirm.png")
 		, Pausenbild ("Pause.png")
-		, Ende("Ende.png")
+		, Ende("Ende_1.png")
 		, Spielsong1("The Caribbean Theme Song.mp3")
 		, Spielsong2("Geometry Dash level 2.mp3")
 		, Level_geschafft("Level_geschafft.png")
-		, Level ("Levelauswahl.png")
+		, Level ("Levelauswahl_1.png")
 		, Pausenanzeige(40)
 		, Prozentanzeige(70)
 
